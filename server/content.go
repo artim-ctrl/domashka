@@ -135,32 +135,36 @@ func loadPage() (*Page, error) {
 }
 
 func (p *Page) eachText(fn func(Text)) {
+	fn(p.Title)
+	for _, s := range p.Sections {
+		s.eachText(fn)
+	}
+}
+
+func (s Section) eachText(fn func(Text)) {
 	opt := func(t *Text) {
 		if t != nil {
 			fn(*t)
 		}
 	}
-	fn(p.Title)
-	for _, s := range p.Sections {
-		opt(s.Title)
-		for _, b := range s.Blocks {
-			opt(b.Text)
-			for _, t := range b.Items {
+	opt(s.Title)
+	for _, b := range s.Blocks {
+		opt(b.Text)
+		for _, t := range b.Items {
+			fn(t)
+		}
+		for _, t := range b.Columns {
+			fn(t)
+		}
+		for _, row := range b.Rows {
+			for _, t := range row {
 				fn(t)
 			}
-			for _, t := range b.Columns {
-				fn(t)
-			}
-			for _, row := range b.Rows {
-				for _, t := range row {
-					fn(t)
-				}
-			}
-			for _, l := range b.Letters {
-				fn(l.IPA)
-				fn(l.Spanish)
-				fn(l.English)
-			}
+		}
+		for _, l := range b.Letters {
+			fn(l.IPA)
+			fn(l.Spanish)
+			fn(l.English)
 		}
 	}
 }
@@ -176,30 +180,66 @@ func tokens(s string) []string {
 	return out
 }
 
-// Clips — все записи, которые упоминает страница, в порядке появления, без повторов.
-func (p *Page) Clips() []Clip {
-	var clips []Clip
-	seen := map[Clip]bool{}
-	add := func(c Clip) {
-		if c.Key != "" && !seen[c] {
-			seen[c] = true
-			clips = append(clips, c)
+// ClipUse — запись и то, где она звучит на странице.
+type ClipUse struct {
+	Clip
+	Sections []string // id разделов, по порядку
+	IPA      *Text    // транскрипция из алфавита, если это звук буквы
+}
+
+// ClipUses — все записи, которые упоминает страница, в порядке появления, без повторов.
+func (p *Page) ClipUses() []*ClipUse {
+	var uses []*ClipUse
+	byClip := map[Clip]*ClipUse{}
+	add := func(c Clip, section string) *ClipUse {
+		if c.Key == "" {
+			return nil
 		}
+		u := byClip[c]
+		if u == nil {
+			u = &ClipUse{Clip: c}
+			byClip[c] = u
+			uses = append(uses, u)
+		}
+		if !slices.Contains(u.Sections, section) {
+			u.Sections = append(u.Sections, section)
+		}
+		return u
 	}
 	for _, s := range p.Sections {
 		for _, b := range s.Blocks {
 			for _, l := range b.Letters {
-				add(Clip{Kind: KindSound, Key: l.Sound})
-				add(Clip{Kind: KindWord, Key: l.Example})
+				if u := add(Clip{Kind: KindSound, Key: l.Sound}, s.ID); u != nil && u.IPA == nil {
+					u.IPA = &l.IPA
+				}
+				add(Clip{Kind: KindWord, Key: l.Example}, s.ID)
 			}
 		}
+		// Переводы проверены на одинаковые кнопки, так что хватает первого варианта.
+		s.eachText(func(t Text) {
+			for _, tok := range tokens(t.Variants()[0]) {
+				kind, key, _ := strings.Cut(tok, ":")
+				add(Clip{Kind: Kind(kind), Key: key}, s.ID)
+			}
+		})
 	}
-	// Переводы проверены на одинаковые кнопки, так что хватает испанского.
-	p.eachText(func(t Text) {
-		for _, tok := range tokens(t.Variants()[0]) {
-			kind, key, _ := strings.Cut(tok, ":")
-			add(Clip{Kind: Kind(kind), Key: key})
+	return uses
+}
+
+func (p *Page) Clips() []Clip {
+	var out []Clip
+	for _, u := range p.ClipUses() {
+		out = append(out, u.Clip)
+	}
+	return out
+}
+
+// FindClip — запись страницы по ключу из адреса (ключ сравнивается без учёта регистра и ударения).
+func (p *Page) FindClip(kind Kind, key string) (Clip, bool) {
+	for _, c := range p.Clips() {
+		if c.Kind == kind && normalizeKey(c.Key) == normalizeKey(key) {
+			return c, true
 		}
-	})
-	return clips
+	}
+	return Clip{}, false
 }

@@ -10,8 +10,8 @@ install: ## Установить зависимости интерфейса
 	cd web && npm install
 
 .PHONY: api
-api: ## Запустить сервер на :8080 (записи берёт из audio/)
-	cd server && go run . -audio ../audio
+api: ## Запустить сервер на :8080 (записи в audio/, запись из браузера разрешена)
+	cd server && go run . -audio ../audio -record
 
 .PHONY: web
 web: ## Запустить интерфейс на :5180 (Vite проксирует /api на сервер)
@@ -32,5 +32,5 @@ build: ## Собрать интерфейс и бинарь сервера в bi
 	cd server && go build -o ../bin/domashka .
 
 .PHONY: serve
-serve: build ## Собрать и запустить всё одним сервером на :8080
+serve: build ## Собрать и запустить всё одним сервером на :8080 (без записи, как для учеников)
 	./bin/domashka -audio audio -static web/dist

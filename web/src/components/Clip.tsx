@@ -9,10 +9,11 @@ type Props = {
   children?: ReactNode;
   variant?: "inline" | "tile";
   className?: string;
+  lang?: string; // язык подписи: обычно это русское слово
 };
 
 // Кнопка, которая проигрывает запись звука или слова. Без записи — видна, но неактивна.
-export function Clip({ kind, clipKey, children, variant = "inline", className = "" }: Props) {
+export function Clip({ kind, clipKey, children, variant = "inline", className = "", lang = "ru" }: Props) {
   const { urlOf, playing, play } = usePlayer();
   const { ui } = useI18n();
   const available = urlOf(kind, clipKey) !== undefined;
@@ -26,7 +27,7 @@ export function Clip({ kind, clipKey, children, variant = "inline", className = 
       disabled={!available}
       onClick={() => play(kind, clipKey)}
       title={!available ? ui.pending(clipKey) : kind === "s" ? ui.listenSound(clipKey) : ui.listenWord(clipKey)}
-      lang="ru"
+      lang={lang}
     >
       <span className="clip__label">{children ?? clipKey}</span>
       <span className="clip__icon" aria-hidden>
@@ -36,7 +37,7 @@ export function Clip({ kind, clipKey, children, variant = "inline", className = 
   );
 }
 
-function Speaker() {
+export function Speaker() {
   return (
     <svg viewBox="0 0 16 16" width="1em" height="1em">
       <path d="M2.5 6h2.2L8 3.2v9.6L4.7 10H2.5z" fill="currentColor" />

@@ -37,4 +37,19 @@ export type PageResponse = {
   // «s:ш» / «w:дом» → адрес записи; чего нет — ещё не записано.
   recordings: Record<string, string>;
   total: number;
+  canRecord: boolean;
+};
+
+export type ClipInfo = {
+  kind: ClipKind;
+  key: string;
+  url?: string; // нет — ещё не записано
+  ipa?: Text;
+  usedIn: string[]; // id разделов страницы
+};
+
+export type ClipsResponse = {
+  canRecord: boolean;
+  sections: Record<string, Text>;
+  clips: ClipInfo[];
 };
