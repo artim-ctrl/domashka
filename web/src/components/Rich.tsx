@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useI18n, type Text } from "../i18n";
 import type { ClipKind } from "../types";
 import { Clip } from "./Clip";
 
@@ -6,7 +7,8 @@ import { Clip } from "./Clip";
 // {{s:ш}} — звук, {{w:дом}} — слово, {{w:молоко|молоко́}} — ключ записи|подпись.
 const MARKUP = /\{\{([sw]):([^}|]+)(?:\|([^}]*))?\}\}|\*\*([^*]+)\*\*|\*([^*]+)\*/g;
 
-export function Rich({ text }: { text: string }) {
+export function Rich({ text: source }: { text: Text }) {
+  const text = useI18n().t(source);
   const out: ReactNode[] = [];
   let last = 0;
   for (const m of text.matchAll(MARKUP)) {

@@ -1,3 +1,4 @@
+import { useI18n } from "../i18n";
 import type { Block, LetterRow } from "../types";
 import { Clip } from "./Clip";
 import { Rich } from "./Rich";
@@ -32,8 +33,10 @@ export function BlockView({ block }: { block: Block }) {
           <table className="table">
             <thead>
               <tr>
-                {block.columns.map((c) => (
-                  <th key={c}>{c}</th>
+                {block.columns.map((c, i) => (
+                  <th key={i}>
+                    <Rich text={c} />
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -57,14 +60,15 @@ export function BlockView({ block }: { block: Block }) {
 }
 
 function Alphabet({ letters }: { letters: LetterRow[] }) {
+  const { ui } = useI18n();
   return (
-    <div className="alphabet" role="table" aria-label="Alfabeto ruso">
+    <div className="alphabet" role="table" aria-label={ui.alphabet}>
       <div className="alphabet__row alphabet__head" role="row">
-        <span role="columnheader">Letra rusa</span>
-        <span role="columnheader">Sonido</span>
-        <span role="columnheader">Español</span>
-        <span role="columnheader">Inglés</span>
-        <span role="columnheader">Ejemplo</span>
+        <span role="columnheader">{ui.colLetter}</span>
+        <span role="columnheader">{ui.colSound}</span>
+        <span role="columnheader">{ui.colSpanish}</span>
+        <span role="columnheader">{ui.colEnglish}</span>
+        <span role="columnheader">{ui.colExample}</span>
       </div>
       {letters.map((l) => (
         <div className="alphabet__row" role="row" key={l.letter}>
@@ -74,20 +78,20 @@ function Alphabet({ letters }: { letters: LetterRow[] }) {
                 {l.letter}
               </Clip>
             ) : (
-              <span className="tile tile--silent" lang="ru" title="Sin sonido propio">
+              <span className="tile tile--silent" lang="ru" title={ui.silent}>
                 {l.letter}
               </span>
             )}
-            {l.focus && <span className="focus-dot" title="Hay que practicar más" />}
+            {l.focus && <span className="focus-dot" title={ui.focus} />}
           </span>
           <span className="alphabet__ipa" role="cell">
-            {l.ipa}
+            <Rich text={l.ipa} />
           </span>
-          <span className="alphabet__text" role="cell" data-label="Español">
-            <Rich text={l.es} />
+          <span className="alphabet__text" role="cell" data-label={ui.colSpanish}>
+            <Rich text={l.spanish} />
           </span>
-          <span className="alphabet__text" role="cell" data-label="Inglés">
-            <Rich text={l.en} />
+          <span className="alphabet__text" role="cell" data-label={ui.colEnglish}>
+            <Rich text={l.english} />
           </span>
           <span className="alphabet__example" role="cell">
             <Clip kind="w" clipKey={l.example} />

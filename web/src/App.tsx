@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { fetchPage } from "./api";
 import { BlockView } from "./components/Blocks";
+import { LangSwitch } from "./components/LangSwitch";
 import { ThemeSwitch } from "./components/ThemeSwitch";
+import { useI18n } from "./i18n";
 import { PlayerProvider } from "./player";
 import type { PageResponse } from "./types";
 
 export function App() {
+  const { ui, t } = useI18n();
   const [data, setData] = useState<PageResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,38 +21,45 @@ export function App() {
     if (data && location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   }, [data]);
 
+  useEffect(() => {
+    if (data) document.title = t(data.page.title);
+  }, [data, t]);
+
   if (error) {
     return (
       <main className="page page--status">
-        <p>No se pudo cargar la página.</p>
+        <p>{ui.loadError}</p>
         <code>{error}</code>
       </main>
     );
   }
-  if (!data) return <main className="page page--status">Cargando…</main>;
+  if (!data) return <main className="page page--status">{ui.loading}</main>;
 
   const { page, recordings, total } = data;
-  const titled = page.sections.filter((s) => s.title);
   const recorded = Object.keys(recordings).length;
 
   return (
     <PlayerProvider recordings={recordings}>
       <header className="topbar">
-        <nav className="topbar__nav" aria-label="Secciones">
-          {titled.map((s) => (
-            <a key={s.id} href={`#${s.id}`}>
-              {s.title}
-            </a>
-          ))}
+        <nav className="topbar__nav" aria-label={ui.sections}>
+          {page.sections.map(
+            (s) =>
+              s.title && (
+                <a key={s.id} href={`#${s.id}`}>
+                  {t(s.title)}
+                </a>
+              ),
+          )}
         </nav>
+        <LangSwitch />
         <ThemeSwitch />
       </header>
 
       <main className="page">
-        <h1>{page.title}</h1>
+        <h1>{t(page.title)}</h1>
         {page.sections.map((s) => (
           <section key={s.id} id={s.id} className="section">
-            {s.title && <h2>{s.title}</h2>}
+            {s.title && <h2>{t(s.title)}</h2>}
             {s.blocks.map((b, i) => (
               <BlockView key={i} block={b} />
             ))}
@@ -57,9 +67,7 @@ export function App() {
         ))}
       </main>
 
-      <footer className="footer">
-        Grabaciones: {recorded} de {total}
-      </footer>
+      <footer className="footer">{ui.recordings(recorded, total)}</footer>
     </PlayerProvider>
   );
 }

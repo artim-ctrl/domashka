@@ -1,90 +1,349 @@
 {
-  "title": "Pronunciación de los sonidos rusos",
+  "title": {
+    "es": "Pronunciación de los sonidos rusos",
+    "en": "Pronunciation of Russian sounds",
+    "ru": "Произношение русских звуков"
+  },
   "sections": [
     {
       "id": "intro",
       "blocks": [
         {
           "type": "callout",
-          "text": "**Importante:** los sonidos en español o inglés son solo referencias aproximadas. Algunos sonidos rusos no existen exactamente en español o inglés."
+          "text": {
+            "es": "**Importante:** los sonidos en español o inglés son solo referencias aproximadas. Algunos sonidos rusos no existen exactamente en español o inglés.",
+            "en": "**Important:** the Spanish and English sounds are only rough references. Some Russian sounds don't exist exactly in Spanish or English.",
+            "ru": "**Важно:** испанские и английские звуки — лишь примерные ориентиры. Некоторых русских звуков в испанском и английском в точности нет."
+          }
         },
         {
           "type": "paragraph",
-          "text": "Además, la pronunciación de una letra rusa puede cambiar según su posición en la palabra. Esta tabla muestra principalmente su **pronunciación básica**."
+          "text": {
+            "es": "Además, la pronunciación de una letra rusa puede cambiar según su posición en la palabra. Esta tabla muestra principalmente su **pronunciación básica**.",
+            "en": "Also, the pronunciation of a Russian letter can change depending on its position in the word. This table mainly shows its **basic pronunciation**.",
+            "ru": "Кроме того, произношение русской буквы может меняться в зависимости от её места в слове. В таблице показано в основном **базовое произношение**."
+          }
         }
       ]
     },
     {
       "id": "alfabeto",
-      "title": "El alfabeto",
+      "title": { "es": "El alfabeto", "en": "The alphabet", "ru": "Алфавит" },
       "blocks": [
         {
           "type": "alphabet",
           "letters": [
-            { "letter": "А а", "sound": "а", "ipa": "/a/", "es": "**a** en *casa*", "en": "**a** en *father*", "example": "мама" },
-            { "letter": "Б б", "sound": "б", "ipa": "/b/", "es": "**b** al comienzo de *barco*", "en": "**b** en *book*", "example": "баба" },
-            { "letter": "В в", "sound": "в", "ipa": "/v/", "es": "no existe en español estándar; se produce tocando el labio inferior con los dientes superiores y usando la voz", "en": "**v** en *very*", "example": "вода" },
-            { "letter": "Г г", "sound": "г", "ipa": "/g/", "es": "**g** en *gato*", "en": "**g** en *go*", "example": "гол" },
-            { "letter": "Д д", "sound": "д", "ipa": "/d/", "es": "**d** al comienzo de *donde*", "en": "**d** en *dog*", "example": "дом" },
-            { "letter": "Е е", "sound": "е", "ipa": "/je/ o /e/", "es": "al principio de palabra, parecido a **ie** en *hielo*; después de una consonante suele indicar que esta es blanda", "en": "**ye** en *yes*", "example": "ель" },
-            { "letter": "Ё ё", "sound": "ё", "ipa": "/jo/ o /o/", "es": "al principio, aproximadamente **io** pronunciado en una sola sílaba; después de consonante suele hacerla blanda", "en": "aproximadamente **yo**", "example": "ёлка" },
-            { "letter": "Ж ж", "sound": "ж", "ipa": "/ʐ/", "es": "no existe exactamente", "en": "parecido a **s** en *measure*, pero con la lengua más atrás", "example": "жаба", "focus": true },
-            { "letter": "З з", "sound": "з", "ipa": "/z/", "es": "parecido a la **s** sonora de *mismo* en muchos acentos", "en": "**z** en *zoo*", "example": "зуб" },
-            { "letter": "И и", "sound": "и", "ipa": "/i/", "es": "**i** en *sí*", "en": "**ee** en *see*", "example": "мир" },
-            { "letter": "Й й", "sound": "й", "ipa": "/j/", "es": "parecido a la **i** semiconsonante al comienzo de *hielo*", "en": "**y** en *yes*", "example": "май" },
-            { "letter": "К к", "sound": "к", "ipa": "/k/", "es": "**c/k** en *casa/kilo*", "en": "**k** en *sky*", "example": "кот" },
-            { "letter": "Л л", "sound": "л", "ipa": "/ɫ/ o /lʲ/", "es": "la **л** dura es más posterior que la **l** española; la blanda se pronuncia con la lengua más adelantada", "en": "la **l** dura se parece a la **l** de *full*", "example": "луна" },
-            { "letter": "М м", "sound": "м", "ipa": "/m/", "es": "**m** en *mamá*", "en": "**m** en *mom*", "example": "мама" },
-            { "letter": "Н н", "sound": "н", "ipa": "/n/", "es": "**n** en *nada*", "en": "**n** en *no*", "example": "нос" },
-            { "letter": "О о", "sound": "о", "ipa": "/o/", "es": "**o** en *cosa* cuando lleva acento", "en": "aproximado a la vocal de *more*, dependiendo del acento", "example": "дом" },
-            { "letter": "П п", "sound": "п", "ipa": "/p/", "es": "**p** en *papá*", "en": "**p** en *spin*", "example": "папа" },
-            { "letter": "Р р", "sound": "р", "ipa": "/r/", "es": "muy parecida a la **rr** de *perro*", "en": "no existe de forma habitual en inglés estándar", "example": "рыба", "focus": true },
-            { "letter": "С с", "sound": "с", "ipa": "/s/", "es": "**s** en *sí*", "en": "**s** en *see*", "example": "сок" },
-            { "letter": "Т т", "sound": "т", "ipa": "/t/", "es": "**t** en *tú*", "en": "parecido a **t** en *stop*", "example": "ты" },
-            { "letter": "У у", "sound": "у", "ipa": "/u/", "es": "**u** en *tú*", "en": "**oo** en *food*", "example": "суп" },
-            { "letter": "Ф ф", "sound": "ф", "ipa": "/f/", "es": "**f** en *familia*", "en": "**f** en *food*", "example": "фото" },
-            { "letter": "Х х", "sound": "х", "ipa": "/x/", "es": "parecido a **j** en *jamón* en los dialectos donde se pronuncia [x]", "en": "**ch** en el escocés *loch*", "example": "хлеб" },
-            { "letter": "Ц ц", "sound": "ц", "ipa": "/t͡s/", "es": "**ts** en *tsunami*", "en": "**ts** al final de *cats*", "example": "цвет" },
-            { "letter": "Ч ч", "sound": "ч", "ipa": "/tɕ/", "es": "parecido a **ch** en *chico*, pero más suave", "en": "parecido a **ch** en *chair*, pero más suave", "example": "чай" },
-            { "letter": "Ш ш", "sound": "ш", "ipa": "/ʂ/", "es": "no existe exactamente", "en": "parecido a **sh** en *she*, pero con la lengua más atrás", "example": "шапка", "focus": true },
-            { "letter": "Щ щ", "sound": "щ", "ipa": "/ɕː/", "es": "no existe exactamente; parecido a una **sh** muy suave y larga", "en": "no existe exactamente; una **sh** suave y larga", "example": "щётка", "focus": true },
-            { "letter": "Ъ ъ", "ipa": "sin sonido propio", "es": "signo duro: delante de **е, ё, ю, я** separa la consonante de la vocal; la consonante no se suaviza y aparece un sonido /j/ antes de la vocal", "en": "—", "example": "объект" },
-            { "letter": "Ы ы", "sound": "ы", "ipa": "/ɨ/", "es": "no existe exactamente", "en": "no existe exactamente", "example": "мы", "focus": true },
-            { "letter": "Ь ь", "ipa": "sin sonido propio", "es": "signo blando: normalmente indica que la consonante anterior es blanda; delante de **е, ё, ю, я** también puede separar la consonante de la vocal", "en": "—", "example": "день" },
-            { "letter": "Э э", "sound": "э", "ipa": "/e/ ~ [ɛ]", "es": "parecido a **e** en *mesa*, aunque puede ser algo más abierta", "en": "parecido a **e** en *bed*", "example": "это" },
-            { "letter": "Ю ю", "sound": "ю", "ipa": "/ju/ o /u/", "es": "al principio, aproximadamente **iu** en una sola sílaba; después de consonante suele hacerla blanda", "en": "**you**", "example": "юг" },
-            { "letter": "Я я", "sound": "я", "ipa": "/ja/ o /a/", "es": "al principio, aproximadamente **ia** en una sola sílaba; después de consonante suele hacerla blanda", "en": "aproximadamente **ya** en *yard*", "example": "я" }
+            {
+              "letter": "А а", "sound": "а", "ipa": "/a/", "example": "мама",
+              "spanish": { "es": "**a** en *casa*", "en": "**a** in *casa*", "ru": "**a** в *casa*" },
+              "english": { "es": "**a** en *father*", "en": "**a** in *father*", "ru": "**a** в *father*" }
+            },
+            {
+              "letter": "Б б", "sound": "б", "ipa": "/b/", "example": "баба",
+              "spanish": { "es": "**b** al comienzo de *barco*", "en": "**b** at the start of *barco*", "ru": "**b** в начале *barco*" },
+              "english": { "es": "**b** en *book*", "en": "**b** in *book*", "ru": "**b** в *book*" }
+            },
+            {
+              "letter": "В в", "sound": "в", "ipa": "/v/", "example": "вода",
+              "spanish": {
+                "es": "no existe en español estándar; se produce tocando el labio inferior con los dientes superiores y usando la voz",
+                "en": "doesn't exist in standard Spanish; it's made by touching the lower lip with the upper teeth and using the voice",
+                "ru": "в стандартном испанском нет; верхние зубы касаются нижней губы, и при этом звучит голос"
+              },
+              "english": { "es": "**v** en *very*", "en": "**v** in *very*", "ru": "**v** в *very*" }
+            },
+            {
+              "letter": "Г г", "sound": "г", "ipa": "/g/", "example": "гол",
+              "spanish": { "es": "**g** en *gato*", "en": "**g** in *gato*", "ru": "**g** в *gato*" },
+              "english": { "es": "**g** en *go*", "en": "**g** in *go*", "ru": "**g** в *go*" }
+            },
+            {
+              "letter": "Д д", "sound": "д", "ipa": "/d/", "example": "дом",
+              "spanish": { "es": "**d** al comienzo de *donde*", "en": "**d** at the start of *donde*", "ru": "**d** в начале *donde*" },
+              "english": { "es": "**d** en *dog*", "en": "**d** in *dog*", "ru": "**d** в *dog*" }
+            },
+            {
+              "letter": "Е е", "sound": "е", "example": "ель",
+              "ipa": { "es": "/je/ o /e/", "en": "/je/ or /e/", "ru": "/je/ или /e/" },
+              "spanish": {
+                "es": "al principio de palabra, parecido a **ie** en *hielo*; después de una consonante suele indicar que esta es blanda",
+                "en": "at the start of a word, similar to **ie** in *hielo*; after a consonant it usually shows that the consonant is soft",
+                "ru": "в начале слова похоже на **ie** в *hielo*; после согласной обычно показывает, что она мягкая"
+              },
+              "english": { "es": "**ye** en *yes*", "en": "**ye** in *yes*", "ru": "**ye** в *yes*" }
+            },
+            {
+              "letter": "Ё ё", "sound": "ё", "example": "ёлка",
+              "ipa": { "es": "/jo/ o /o/", "en": "/jo/ or /o/", "ru": "/jo/ или /o/" },
+              "spanish": {
+                "es": "al principio, aproximadamente **io** pronunciado en una sola sílaba; después de consonante suele hacerla blanda",
+                "en": "at the start, roughly **io** said as one syllable; after a consonant it usually makes it soft",
+                "ru": "в начале — примерно **io**, сказанное в один слог; после согласной обычно делает её мягкой"
+              },
+              "english": { "es": "aproximadamente **yo**", "en": "roughly **yo**", "ru": "примерно **yo**" }
+            },
+            {
+              "letter": "Ж ж", "sound": "ж", "ipa": "/ʐ/", "example": "жаба", "focus": true,
+              "spanish": { "es": "no existe exactamente", "en": "no exact equivalent", "ru": "точного соответствия нет" },
+              "english": {
+                "es": "parecido a **s** en *measure*, pero con la lengua más atrás",
+                "en": "like **s** in *measure*, but with the tongue further back",
+                "ru": "похоже на **s** в *measure*, но язык дальше назад"
+              }
+            },
+            {
+              "letter": "З з", "sound": "з", "ipa": "/z/", "example": "зуб",
+              "spanish": {
+                "es": "parecido a la **s** sonora de *mismo* en muchos acentos",
+                "en": "like the voiced **s** of *mismo* in many accents",
+                "ru": "похоже на звонкое **s** в *mismo* во многих акцентах"
+              },
+              "english": { "es": "**z** en *zoo*", "en": "**z** in *zoo*", "ru": "**z** в *zoo*" }
+            },
+            {
+              "letter": "И и", "sound": "и", "ipa": "/i/", "example": "мир",
+              "spanish": { "es": "**i** en *sí*", "en": "**i** in *sí*", "ru": "**i** в *sí*" },
+              "english": { "es": "**ee** en *see*", "en": "**ee** in *see*", "ru": "**ee** в *see*" }
+            },
+            {
+              "letter": "Й й", "sound": "й", "ipa": "/j/", "example": "май",
+              "spanish": {
+                "es": "parecido a la **i** semiconsonante al comienzo de *hielo*",
+                "en": "like the semivowel **i** at the start of *hielo*",
+                "ru": "похоже на полугласное **i** в начале *hielo*"
+              },
+              "english": { "es": "**y** en *yes*", "en": "**y** in *yes*", "ru": "**y** в *yes*" }
+            },
+            {
+              "letter": "К к", "sound": "к", "ipa": "/k/", "example": "кот",
+              "spanish": { "es": "**c/k** en *casa/kilo*", "en": "**c/k** in *casa/kilo*", "ru": "**c/k** в *casa/kilo*" },
+              "english": { "es": "**k** en *sky*", "en": "**k** in *sky*", "ru": "**k** в *sky*" }
+            },
+            {
+              "letter": "Л л", "sound": "л", "example": "луна",
+              "ipa": { "es": "/ɫ/ o /lʲ/", "en": "/ɫ/ or /lʲ/", "ru": "/ɫ/ или /lʲ/" },
+              "spanish": {
+                "es": "la **л** dura es más posterior que la **l** española; la blanda se pronuncia con la lengua más adelantada",
+                "en": "hard **л** is further back than the Spanish **l**; soft **л** is said with the tongue further forward",
+                "ru": "твёрдая **л** глубже испанской **l**; мягкая произносится с языком, продвинутым вперёд"
+              },
+              "english": {
+                "es": "la **l** dura se parece a la **l** de *full*",
+                "en": "hard **л** is like the **l** in *full*",
+                "ru": "твёрдая **л** похожа на **l** в *full*"
+              }
+            },
+            {
+              "letter": "М м", "sound": "м", "ipa": "/m/", "example": "мама",
+              "spanish": { "es": "**m** en *mamá*", "en": "**m** in *mamá*", "ru": "**m** в *mamá*" },
+              "english": { "es": "**m** en *mom*", "en": "**m** in *mom*", "ru": "**m** в *mom*" }
+            },
+            {
+              "letter": "Н н", "sound": "н", "ipa": "/n/", "example": "нос",
+              "spanish": { "es": "**n** en *nada*", "en": "**n** in *nada*", "ru": "**n** в *nada*" },
+              "english": { "es": "**n** en *no*", "en": "**n** in *no*", "ru": "**n** в *no*" }
+            },
+            {
+              "letter": "О о", "sound": "о", "ipa": "/o/", "example": "дом",
+              "spanish": {
+                "es": "**o** en *cosa* cuando lleva acento",
+                "en": "**o** in *cosa* when stressed",
+                "ru": "**o** в *cosa*, когда она под ударением"
+              },
+              "english": {
+                "es": "aproximado a la vocal de *more*, dependiendo del acento",
+                "en": "close to the vowel in *more*, depending on the accent",
+                "ru": "близко к гласной в *more*, зависит от акцента"
+              }
+            },
+            {
+              "letter": "П п", "sound": "п", "ipa": "/p/", "example": "папа",
+              "spanish": { "es": "**p** en *papá*", "en": "**p** in *papá*", "ru": "**p** в *papá*" },
+              "english": { "es": "**p** en *spin*", "en": "**p** in *spin*", "ru": "**p** в *spin*" }
+            },
+            {
+              "letter": "Р р", "sound": "р", "ipa": "/r/", "example": "рыба", "focus": true,
+              "spanish": {
+                "es": "muy parecida a la **rr** de *perro*",
+                "en": "very similar to the **rr** in *perro*",
+                "ru": "очень похожа на **rr** в *perro*"
+              },
+              "english": {
+                "es": "no existe de forma habitual en inglés estándar",
+                "en": "not usually found in standard English",
+                "ru": "в стандартном английском обычно нет"
+              }
+            },
+            {
+              "letter": "С с", "sound": "с", "ipa": "/s/", "example": "сок",
+              "spanish": { "es": "**s** en *sí*", "en": "**s** in *sí*", "ru": "**s** в *sí*" },
+              "english": { "es": "**s** en *see*", "en": "**s** in *see*", "ru": "**s** в *see*" }
+            },
+            {
+              "letter": "Т т", "sound": "т", "ipa": "/t/", "example": "ты",
+              "spanish": { "es": "**t** en *tú*", "en": "**t** in *tú*", "ru": "**t** в *tú*" },
+              "english": { "es": "parecido a **t** en *stop*", "en": "like **t** in *stop*", "ru": "похоже на **t** в *stop*" }
+            },
+            {
+              "letter": "У у", "sound": "у", "ipa": "/u/", "example": "суп",
+              "spanish": { "es": "**u** en *tú*", "en": "**u** in *tú*", "ru": "**u** в *tú*" },
+              "english": { "es": "**oo** en *food*", "en": "**oo** in *food*", "ru": "**oo** в *food*" }
+            },
+            {
+              "letter": "Ф ф", "sound": "ф", "ipa": "/f/", "example": "фото",
+              "spanish": { "es": "**f** en *familia*", "en": "**f** in *familia*", "ru": "**f** в *familia*" },
+              "english": { "es": "**f** en *food*", "en": "**f** in *food*", "ru": "**f** в *food*" }
+            },
+            {
+              "letter": "Х х", "sound": "х", "ipa": "/x/", "example": "хлеб",
+              "spanish": {
+                "es": "parecido a **j** en *jamón* en los dialectos donde se pronuncia [x]",
+                "en": "like **j** in *jamón* in dialects where it's pronounced [x]",
+                "ru": "похоже на **j** в *jamón* в диалектах, где она звучит как [x]"
+              },
+              "english": { "es": "**ch** en el escocés *loch*", "en": "**ch** in Scottish *loch*", "ru": "**ch** в шотландском *loch*" }
+            },
+            {
+              "letter": "Ц ц", "sound": "ц", "ipa": "/t͡s/", "example": "цвет",
+              "spanish": { "es": "**ts** en *tsunami*", "en": "**ts** in *tsunami*", "ru": "**ts** в *tsunami*" },
+              "english": { "es": "**ts** al final de *cats*", "en": "**ts** at the end of *cats*", "ru": "**ts** в конце *cats*" }
+            },
+            {
+              "letter": "Ч ч", "sound": "ч", "ipa": "/tɕ/", "example": "чай",
+              "spanish": {
+                "es": "parecido a **ch** en *chico*, pero más suave",
+                "en": "like **ch** in *chico*, but softer",
+                "ru": "похоже на **ch** в *chico*, но мягче"
+              },
+              "english": {
+                "es": "parecido a **ch** en *chair*, pero más suave",
+                "en": "like **ch** in *chair*, but softer",
+                "ru": "похоже на **ch** в *chair*, но мягче"
+              }
+            },
+            {
+              "letter": "Ш ш", "sound": "ш", "ipa": "/ʂ/", "example": "шапка", "focus": true,
+              "spanish": { "es": "no existe exactamente", "en": "no exact equivalent", "ru": "точного соответствия нет" },
+              "english": {
+                "es": "parecido a **sh** en *she*, pero con la lengua más atrás",
+                "en": "like **sh** in *she*, but with the tongue further back",
+                "ru": "похоже на **sh** в *she*, но язык дальше назад"
+              }
+            },
+            {
+              "letter": "Щ щ", "sound": "щ", "ipa": "/ɕː/", "example": "щётка", "focus": true,
+              "spanish": {
+                "es": "no existe exactamente; parecido a una **sh** muy suave y larga",
+                "en": "no exact equivalent; like a very soft, long **sh**",
+                "ru": "точного соответствия нет; похоже на очень мягкое и долгое **sh**"
+              },
+              "english": {
+                "es": "no existe exactamente; una **sh** suave y larga",
+                "en": "no exact equivalent; a soft, long **sh**",
+                "ru": "точного соответствия нет; мягкое и долгое **sh**"
+              }
+            },
+            {
+              "letter": "Ъ ъ", "example": "объект", "english": "—",
+              "ipa": { "es": "sin sonido propio", "en": "no sound of its own", "ru": "своего звука нет" },
+              "spanish": {
+                "es": "signo duro: delante de **е, ё, ю, я** separa la consonante de la vocal; la consonante no se suaviza y aparece un sonido /j/ antes de la vocal",
+                "en": "hard sign: before **е, ё, ю, я** it separates the consonant from the vowel; the consonant stays hard and a /j/ sound appears before the vowel",
+                "ru": "твёрдый знак: перед **е, ё, ю, я** отделяет согласную от гласной; согласная не смягчается, а перед гласной появляется звук /j/"
+              }
+            },
+            {
+              "letter": "Ы ы", "sound": "ы", "ipa": "/ɨ/", "example": "мы", "focus": true,
+              "spanish": { "es": "no existe exactamente", "en": "no exact equivalent", "ru": "точного соответствия нет" },
+              "english": { "es": "no existe exactamente", "en": "no exact equivalent", "ru": "точного соответствия нет" }
+            },
+            {
+              "letter": "Ь ь", "example": "день", "english": "—",
+              "ipa": { "es": "sin sonido propio", "en": "no sound of its own", "ru": "своего звука нет" },
+              "spanish": {
+                "es": "signo blando: normalmente indica que la consonante anterior es blanda; delante de **е, ё, ю, я** también puede separar la consonante de la vocal",
+                "en": "soft sign: usually shows that the preceding consonant is soft; before **е, ё, ю, я** it can also separate the consonant from the vowel",
+                "ru": "мягкий знак: обычно показывает, что предыдущая согласная мягкая; перед **е, ё, ю, я** также может отделять согласную от гласной"
+              }
+            },
+            {
+              "letter": "Э э", "sound": "э", "ipa": "/e/ ~ [ɛ]", "example": "это",
+              "spanish": {
+                "es": "parecido a **e** en *mesa*, aunque puede ser algo más abierta",
+                "en": "like **e** in *mesa*, though it can be a bit more open",
+                "ru": "похоже на **e** в *mesa*, но может быть чуть более открытым"
+              },
+              "english": { "es": "parecido a **e** en *bed*", "en": "like **e** in *bed*", "ru": "похоже на **e** в *bed*" }
+            },
+            {
+              "letter": "Ю ю", "sound": "ю", "example": "юг", "english": "**you**",
+              "ipa": { "es": "/ju/ o /u/", "en": "/ju/ or /u/", "ru": "/ju/ или /u/" },
+              "spanish": {
+                "es": "al principio, aproximadamente **iu** en una sola sílaba; después de consonante suele hacerla blanda",
+                "en": "at the start, roughly **iu** as one syllable; after a consonant it usually makes it soft",
+                "ru": "в начале — примерно **iu** в один слог; после согласной обычно делает её мягкой"
+              }
+            },
+            {
+              "letter": "Я я", "sound": "я", "example": "я",
+              "ipa": { "es": "/ja/ o /a/", "en": "/ja/ or /a/", "ru": "/ja/ или /a/" },
+              "spanish": {
+                "es": "al principio, aproximadamente **ia** en una sola sílaba; después de consonante suele hacerla blanda",
+                "en": "at the start, roughly **ia** as one syllable; after a consonant it usually makes it soft",
+                "ru": "в начале — примерно **ia** в один слог; после согласной обычно делает её мягкой"
+              },
+              "english": { "es": "aproximadamente **ya** en *yard*", "en": "roughly **ya** in *yard*", "ru": "примерно **ya** в *yard*" }
+            }
           ]
         }
       ]
     },
     {
       "id": "yotizadas",
-      "title": "Е, Ё, Ю y Я",
+      "title": { "es": "Е, Ё, Ю y Я", "en": "Е, Ё, Ю and Я", "ru": "Е, Ё, Ю и Я" },
       "blocks": [
-        { "type": "paragraph", "text": "Estas cuatro letras necesitan una explicación especial." },
         {
           "type": "paragraph",
-          "text": "Al **principio de una palabra**, después de otra vocal y después de **ъ** o **ь**, normalmente contienen un sonido /j/:"
+          "text": {
+            "es": "Estas cuatro letras necesitan una explicación especial.",
+            "en": "These four letters need a special explanation.",
+            "ru": "Эти четыре буквы требуют отдельного объяснения."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "es": "Al **principio de una palabra**, después de otra vocal y después de **ъ** o **ь**, normalmente contienen un sonido /j/:",
+            "en": "At the **start of a word**, after another vowel and after **ъ** or **ь**, they usually contain a /j/ sound:",
+            "ru": "В **начале слова**, после другой гласной и после **ъ** или **ь** они обычно содержат звук /j/:"
+          }
         },
         {
           "type": "list",
           "items": ["{{s:я}} → /ja/", "{{s:е}} → /je/", "{{s:ё}} → /jo/", "{{s:ю}} → /ju/"]
         },
-        { "type": "paragraph", "text": "Por ejemplo:" },
+        { "type": "paragraph", "text": { "es": "Por ejemplo:", "en": "For example:", "ru": "Например:" } },
         {
           "type": "list",
           "items": [
             "{{w:я}} → /ja/",
-            "{{w:ель}} → empieza con /je/",
-            "{{w:ёлка}} → empieza con /jo/",
-            "{{w:юг}} → empieza con /ju/",
-            "{{w:объект}} → la **е** se pronuncia con /j/"
+            { "es": "{{w:ель}} → empieza con /je/", "en": "{{w:ель}} → starts with /je/", "ru": "{{w:ель}} → начинается с /je/" },
+            { "es": "{{w:ёлка}} → empieza con /jo/", "en": "{{w:ёлка}} → starts with /jo/", "ru": "{{w:ёлка}} → начинается с /jo/" },
+            { "es": "{{w:юг}} → empieza con /ju/", "en": "{{w:юг}} → starts with /ju/", "ru": "{{w:юг}} → начинается с /ju/" },
+            {
+              "es": "{{w:объект}} → la **е** se pronuncia con /j/",
+              "en": "{{w:объект}} → the **е** is pronounced with /j/",
+              "ru": "{{w:объект}} → **е** произносится с /j/"
+            }
           ]
         },
         {
           "type": "paragraph",
-          "text": "Después de una consonante, normalmente **no aparece un /j/ separado**. En cambio, estas letras suelen indicar que la consonante anterior es **blanda**:"
+          "text": {
+            "es": "Después de una consonante, normalmente **no aparece un /j/ separado**. En cambio, estas letras suelen indicar que la consonante anterior es **blanda**:",
+            "en": "After a consonant there is usually **no separate /j/**. Instead, these letters usually show that the preceding consonant is **soft**:",
+            "ru": "После согласной **отдельного /j/ обычно нет**. Вместо этого буквы обычно показывают, что предыдущая согласная **мягкая**:"
+          }
         },
         {
           "type": "list",
@@ -94,139 +353,254 @@
     },
     {
       "id": "duras-blandas",
-      "title": "Consonantes duras y blandas",
+      "title": { "es": "Consonantes duras y blandas", "en": "Hard and soft consonants", "ru": "Твёрдые и мягкие согласные" },
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Una característica muy importante del ruso es la diferencia entre consonantes **duras** y **blandas**."
+          "text": {
+            "es": "Una característica muy importante del ruso es la diferencia entre consonantes **duras** y **blandas**.",
+            "en": "A very important feature of Russian is the difference between **hard** and **soft** consonants.",
+            "ru": "Очень важная черта русского языка — различие между **твёрдыми** и **мягкими** согласными."
+          }
         },
-        { "type": "paragraph", "text": "Por ejemplo:" },
+        { "type": "paragraph", "text": { "es": "Por ejemplo:", "en": "For example:", "ru": "Например:" } },
         { "type": "list", "items": ["{{s:н}} → /n/", "{{s:нь}} → /nʲ/"] },
         {
           "type": "paragraph",
-          "text": "La consonante blanda se pronuncia acercando la parte central de la lengua al paladar."
+          "text": {
+            "es": "La consonante blanda se pronuncia acercando la parte central de la lengua al paladar.",
+            "en": "A soft consonant is pronounced by raising the middle of the tongue toward the palate.",
+            "ru": "Мягкая согласная произносится так: средняя часть языка приближается к нёбу."
+          }
         },
         {
           "type": "paragraph",
-          "text": "Las letras **е, ё, и, ю, я** normalmente indican que la consonante anterior es blanda."
+          "text": {
+            "es": "Las letras **е, ё, и, ю, я** normalmente indican que la consonante anterior es blanda.",
+            "en": "The letters **е, ё, и, ю, я** usually show that the preceding consonant is soft.",
+            "ru": "Буквы **е, ё, и, ю, я** обычно показывают, что предыдущая согласная мягкая."
+          }
         },
         {
           "type": "paragraph",
-          "text": "El signo **ь** también suele indicar que la consonante anterior es blanda:"
+          "text": {
+            "es": "El signo **ь** también suele indicar que la consonante anterior es blanda:",
+            "en": "The sign **ь** also usually shows that the preceding consonant is soft:",
+            "ru": "Знак **ь** тоже обычно показывает, что предыдущая согласная мягкая:"
+          }
         },
         {
           "type": "list",
           "items": [
-            "{{w:брат}} — la **т** es dura",
-            "{{w:брать}} — la **т** es blanda",
-            "{{w:кон}} — la **н** es dura",
-            "{{w:конь}} — la **н** es blanda"
+            { "es": "{{w:брат}} — la **т** es dura", "en": "{{w:брат}} — the **т** is hard", "ru": "{{w:брат}} — **т** твёрдая" },
+            { "es": "{{w:брать}} — la **т** es blanda", "en": "{{w:брать}} — the **т** is soft", "ru": "{{w:брать}} — **т** мягкая" },
+            { "es": "{{w:кон}} — la **н** es dura", "en": "{{w:кон}} — the **н** is hard", "ru": "{{w:кон}} — **н** твёрдая" },
+            { "es": "{{w:конь}} — la **н** es blanda", "en": "{{w:конь}} — the **н** is soft", "ru": "{{w:конь}} — **н** мягкая" }
           ]
-        },
-        { "type": "paragraph", "text": "Hay algunas consonantes especiales:" },
-        {
-          "type": "list",
-          "items": ["**ж, ш, ц** normalmente son duras;", "**ч, щ** normalmente son blandas."]
         },
         {
           "type": "paragraph",
-          "text": "Por eso, por ejemplo, la **и** después de **ж, ш, ц** puede sonar más cerca de [ɨ] que de la **i** española."
+          "text": { "es": "Hay algunas consonantes especiales:", "en": "Some consonants are special:", "ru": "Некоторые согласные особенные:" }
+        },
+        {
+          "type": "list",
+          "items": [
+            { "es": "**ж, ш, ц** normalmente son duras;", "en": "**ж, ш, ц** are usually hard;", "ru": "**ж, ш, ц** обычно твёрдые;" },
+            { "es": "**ч, щ** normalmente son blandas.", "en": "**ч, щ** are usually soft.", "ru": "**ч, щ** обычно мягкие." }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "es": "Por eso, por ejemplo, la **и** después de **ж, ш, ц** puede sonar más cerca de [ɨ] que de la **i** española.",
+            "en": "That's why, for example, **и** after **ж, ш, ц** can sound closer to [ɨ] than to the Spanish **i**.",
+            "ru": "Поэтому, например, **и** после **ж, ш, ц** может звучать ближе к [ɨ], чем к испанской **i**."
+          }
         }
       ]
     },
     {
       "id": "vocales-atonas",
-      "title": "Las vocales sin acento",
+      "title": { "es": "Las vocales sin acento", "en": "Unstressed vowels", "ru": "Безударные гласные" },
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Las vocales rusas pueden cambiar considerablemente cuando **no llevan el acento**."
+          "text": {
+            "es": "Las vocales rusas pueden cambiar considerablemente cuando **no llevan el acento**.",
+            "en": "Russian vowels can change considerably when they are **not stressed**.",
+            "ru": "Русские гласные могут сильно меняться, когда они **не под ударением**."
+          }
         },
-        { "type": "paragraph", "text": "Esto es especialmente importante para **о**." },
-        { "type": "paragraph", "text": "Una **о** con acento se pronuncia claramente /o/:" },
+        {
+          "type": "paragraph",
+          "text": {
+            "es": "Esto es especialmente importante para **о**.",
+            "en": "This is especially important for **о**.",
+            "ru": "Особенно это важно для **о**."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "es": "Una **о** con acento se pronuncia claramente /o/:",
+            "en": "A stressed **о** is clearly pronounced /o/:",
+            "ru": "Ударная **о** произносится чётко, как /o/:"
+          }
+        },
         { "type": "list", "items": ["{{w:дом}}", "{{w:стол}}", "{{w:кот}}"] },
         {
           "type": "paragraph",
-          "text": "Una **о** sin acento normalmente se reduce. Dependiendo de su posición, puede sonar aproximadamente como [ɐ] o [ə]."
+          "text": {
+            "es": "Una **о** sin acento normalmente se reduce. Dependiendo de su posición, puede sonar aproximadamente como [ɐ] o [ə].",
+            "en": "An unstressed **о** is usually reduced. Depending on its position, it can sound roughly like [ɐ] or [ə].",
+            "ru": "Безударная **о** обычно редуцируется. В зависимости от позиции она звучит примерно как [ɐ] или [ə]."
+          }
         },
-        { "type": "paragraph", "text": "Por ejemplo: {{w:молоко|молоко́}} → [məɫɐˈko]" },
         {
           "type": "paragraph",
-          "text": "Para un hispanohablante, una aproximación muy simplificada podría ser **малако́**, pero hay que recordar que las dos primeras vocales no son realmente una **a** española normal."
+          "text": {
+            "es": "Por ejemplo: {{w:молоко|молоко́}} → [məɫɐˈko]",
+            "en": "For example: {{w:молоко|молоко́}} → [məɫɐˈko]",
+            "ru": "Например: {{w:молоко|молоко́}} → [məɫɐˈko]"
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "es": "Para un hispanohablante, una aproximación muy simplificada podría ser **малако́**, pero hay que recordar que las dos primeras vocales no son realmente una **a** española normal.",
+            "en": "For a Spanish speaker, a very simplified approximation could be **малако́**, but remember that the first two vowels are not really a normal Spanish **a**.",
+            "ru": "Для испаноговорящего очень упрощённым приближением может быть **малако́**, но первые две гласные — это не совсем обычная испанская **a**."
+          }
         }
       ]
     },
     {
       "id": "ensordecimiento",
-      "title": "Ensordecimiento de las consonantes",
+      "title": { "es": "Ensordecimiento de las consonantes", "en": "Devoicing of consonants", "ru": "Оглушение согласных" },
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Las consonantes sonoras pueden cambiar de pronunciación dependiendo de lo que tengan alrededor."
+          "text": {
+            "es": "Las consonantes sonoras pueden cambiar de pronunciación dependiendo de lo que tengan alrededor.",
+            "en": "Voiced consonants can change their pronunciation depending on what surrounds them.",
+            "ru": "Звонкие согласные могут менять произношение в зависимости от соседних звуков."
+          }
         },
         {
           "type": "paragraph",
-          "text": "Por ejemplo, al final de una palabra una consonante sonora normalmente se vuelve sorda:"
+          "text": {
+            "es": "Por ejemplo, al final de una palabra una consonante sonora normalmente se vuelve sorda:",
+            "en": "For example, at the end of a word a voiced consonant usually becomes voiceless:",
+            "ru": "Например, на конце слова звонкая согласная обычно становится глухой:"
+          }
         },
         {
           "type": "list",
           "items": [
-            "{{w:дуб}} → la **б** final suena aproximadamente como /p/",
-            "{{w:год}} → la **д** final suena aproximadamente como /t/"
+            {
+              "es": "{{w:дуб}} → la **б** final suena aproximadamente como /p/",
+              "en": "{{w:дуб}} → the final **б** sounds roughly like /p/",
+              "ru": "{{w:дуб}} → конечная **б** звучит примерно как /p/"
+            },
+            {
+              "es": "{{w:год}} → la **д** final suena aproximadamente como /t/",
+              "en": "{{w:год}} → the final **д** sounds roughly like /t/",
+              "ru": "{{w:год}} → конечная **д** звучит примерно как /t/"
+            }
           ]
         },
         {
           "type": "paragraph",
-          "text": "Por eso, la pronunciación real de una letra rusa no siempre coincide exactamente con el sonido básico que aparece en la tabla."
+          "text": {
+            "es": "Por eso, la pronunciación real de una letra rusa no siempre coincide exactamente con el sonido básico que aparece en la tabla.",
+            "en": "That's why the actual pronunciation of a Russian letter doesn't always match the basic sound shown in the table.",
+            "ru": "Поэтому реальное произношение русской буквы не всегда совпадает с базовым звуком из таблицы."
+          }
         }
       ]
     },
     {
       "id": "practicar",
-      "title": "Los sonidos que hay que practicar más",
+      "title": { "es": "Los sonidos que hay que practicar más", "en": "Sounds to practice more", "ru": "Звуки, которые стоит потренировать" },
       "blocks": [
         {
           "type": "list",
           "style": "focus",
           "items": [
-            "{{s:ы|Ы}}: no existe en español y suele ser uno de los sonidos más difíciles.",
-            "{{s:ш|Ш}}: parecido a **sh** en inglés *she*, pero se articula con la lengua más atrás.",
-            "{{s:щ|Щ}}: más suave y más largo que **ш**.",
-            "{{s:ж|Ж}}: parecido al sonido de **s** en inglés *measure*, pero con la lengua más atrás.",
-            "{{s:р|Р}}: muy parecida a la **rr** española.",
-            "**Consonantes blandas**: distinguir, por ejemplo, {{s:н}} de {{s:нь}}, {{s:т}} de {{s:ть}} o {{s:л}} de {{s:ль}} es muy importante en ruso."
+            {
+              "es": "{{s:ы|Ы}}: no existe en español y suele ser uno de los sonidos más difíciles.",
+              "en": "{{s:ы|Ы}}: doesn't exist in Spanish and is usually one of the hardest sounds.",
+              "ru": "{{s:ы|Ы}}: в испанском его нет, и обычно это один из самых трудных звуков."
+            },
+            {
+              "es": "{{s:ш|Ш}}: parecido a **sh** en inglés *she*, pero se articula con la lengua más atrás.",
+              "en": "{{s:ш|Ш}}: like **sh** in English *she*, but articulated with the tongue further back.",
+              "ru": "{{s:ш|Ш}}: похоже на **sh** в английском *she*, но язык дальше назад."
+            },
+            {
+              "es": "{{s:щ|Щ}}: más suave y más largo que **ш**.",
+              "en": "{{s:щ|Щ}}: softer and longer than **ш**.",
+              "ru": "{{s:щ|Щ}}: мягче и длиннее, чем **ш**."
+            },
+            {
+              "es": "{{s:ж|Ж}}: parecido al sonido de **s** en inglés *measure*, pero con la lengua más atrás.",
+              "en": "{{s:ж|Ж}}: like the **s** sound in English *measure*, but with the tongue further back.",
+              "ru": "{{s:ж|Ж}}: похоже на звук **s** в английском *measure*, но язык дальше назад."
+            },
+            {
+              "es": "{{s:р|Р}}: muy parecida a la **rr** española.",
+              "en": "{{s:р|Р}}: very similar to the Spanish **rr**.",
+              "ru": "{{s:р|Р}}: очень похожа на испанскую **rr**."
+            },
+            {
+              "es": "**Consonantes blandas**: distinguir, por ejemplo, {{s:н}} de {{s:нь}}, {{s:т}} de {{s:ть}} o {{s:л}} de {{s:ль}} es muy importante en ruso.",
+              "en": "**Soft consonants**: telling apart, for example, {{s:н}} from {{s:нь}}, {{s:т}} from {{s:ть}} or {{s:л}} from {{s:ль}} is very important in Russian.",
+              "ru": "**Мягкие согласные**: различать, например, {{s:н}} и {{s:нь}}, {{s:т}} и {{s:ть}} или {{s:л}} и {{s:ль}} в русском очень важно."
+            }
           ]
         }
       ]
     },
     {
       "id": "cuidado",
-      "title": "Cuidado con estas letras",
+      "title": { "es": "Cuidado con estas letras", "en": "Watch out for these letters", "ru": "Осторожно с этими буквами" },
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Estas letras se parecen a letras latinas, pero **no tienen el mismo sonido**:"
+          "text": {
+            "es": "Estas letras se parecen a letras latinas, pero **no tienen el mismo sonido**:",
+            "en": "These letters look like Latin letters, but **don't have the same sound**:",
+            "ru": "Эти буквы похожи на латинские, но **звучат иначе**:"
+          }
         },
         {
           "type": "table",
-          "columns": ["Letra rusa", "Se parece a…", "Pero suena…"],
+          "columns": [
+            { "es": "Letra rusa", "en": "Russian letter", "ru": "Русская буква" },
+            { "es": "Se parece a…", "en": "Looks like…", "ru": "Похожа на…" },
+            { "es": "Pero suena…", "en": "But sounds like…", "ru": "А звучит как…" }
+          ],
           "rows": [
-            ["{{s:в|В}}", "B", "/v/, no /b/"],
-            ["{{s:н|Н}}", "H", "/n/, no /h/"],
-            ["{{s:р|Р}}", "P", "/r/, no /p/"],
-            ["{{s:с|С}}", "C", "/s/, no /k/ ni /θ/"],
-            ["{{s:у|У}}", "Y", "/u/, no /y/"]
+            ["{{s:в|В}}", "B", { "es": "/v/, no /b/", "en": "/v/, not /b/", "ru": "/v/, а не /b/" }],
+            ["{{s:н|Н}}", "H", { "es": "/n/, no /h/", "en": "/n/, not /h/", "ru": "/n/, а не /h/" }],
+            ["{{s:р|Р}}", "P", { "es": "/r/, no /p/", "en": "/r/, not /p/", "ru": "/r/, а не /p/" }],
+            ["{{s:с|С}}", "C", { "es": "/s/, no /k/ ni /θ/", "en": "/s/, not /k/ or /θ/", "ru": "/s/, а не /k/ и не /θ/" }],
+            ["{{s:у|У}}", "Y", { "es": "/u/, no /y/", "en": "/u/, not /y/", "ru": "/u/, а не /y/" }]
           ]
         }
       ]
     },
     {
       "id": "pares",
-      "title": "Pares que hay que distinguir",
+      "title": { "es": "Pares que hay que distinguir", "en": "Pairs to tell apart", "ru": "Пары, которые нужно различать" },
       "blocks": [
         {
           "type": "table",
-          "columns": ["Par", "Sonidos", "Palabras para practicar"],
+          "columns": [
+            { "es": "Par", "en": "Pair", "ru": "Пара" },
+            { "es": "Sonidos", "en": "Sounds", "ru": "Звуки" },
+            { "es": "Palabras para practicar", "en": "Words to practice", "ru": "Слова для тренировки" }
+          ],
           "rows": [
             ["**Б — В**", "{{s:б}} → /b/, {{s:в}} → /v/", "{{w:база}} — {{w:ваза}}, {{w:бил}} — {{w:вил}}"],
             ["**Ч — Ш**", "{{s:ч}} → /tɕ/, {{s:ш}} → /ʂ/", "{{w:чашка}} — {{w:шашка}}, {{w:честь}} — {{w:шесть}}"],
@@ -234,12 +608,24 @@
             ["**И — Ы**", "{{s:и}} → /i/, {{s:ы}} → /ɨ/", "{{w:мил}} — {{w:мыл}}, {{w:бить}} — {{w:быть}}"],
             ["**С — Ш**", "{{s:с}} → /s/, {{s:ш}} → /ʂ/", "{{w:сок}} — {{w:шок}}, {{w:миска}} — {{w:мишка}}"],
             ["**Ц — Ч**", "{{s:ц}} → /t͡s/, {{s:ч}} → /tɕ/", "{{w:цех}} — {{w:чех}}, {{w:цвет}} — {{w:чай}}"],
-            ["**Щ — Ш**", "{{s:щ}} → /ɕː/ (suave y larga), {{s:ш}} → /ʂ/ (dura)", "{{w:щётка}} — {{w:шёлк}}, {{w:щука}} — {{w:шуба}}"]
+            [
+              "**Щ — Ш**",
+              {
+                "es": "{{s:щ}} → /ɕː/ (suave y larga), {{s:ш}} → /ʂ/ (dura)",
+                "en": "{{s:щ}} → /ɕː/ (soft and long), {{s:ш}} → /ʂ/ (hard)",
+                "ru": "{{s:щ}} → /ɕː/ (мягкая и долгая), {{s:ш}} → /ʂ/ (твёрдая)"
+              },
+              "{{w:щётка}} — {{w:шёлк}}, {{w:щука}} — {{w:шуба}}"
+            ]
           ]
         },
         {
           "type": "paragraph",
-          "text": "No hace falta pronunciarlos perfectamente desde el primer día. Lo importante es **escuchar la diferencia y practicarla poco a poco**."
+          "text": {
+            "es": "No hace falta pronunciarlos perfectamente desde el primer día. Lo importante es **escuchar la diferencia y practicarla poco a poco**.",
+            "en": "You don't need to pronounce them perfectly from day one. What matters is to **hear the difference and practice it little by little**.",
+            "ru": "Не нужно произносить их идеально с первого дня. Главное — **слышать разницу и понемногу её тренировать**."
+          }
         }
       ]
     }

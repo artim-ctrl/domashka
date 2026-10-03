@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useI18n } from "../i18n";
 import { clipId, usePlayer } from "../player";
 import type { ClipKind } from "../types";
 
@@ -13,9 +14,9 @@ type Props = {
 // Кнопка, которая проигрывает запись звука или слова. Без записи — видна, но неактивна.
 export function Clip({ kind, clipKey, children, variant = "inline", className = "" }: Props) {
   const { urlOf, playing, play } = usePlayer();
+  const { ui } = useI18n();
   const available = urlOf(kind, clipKey) !== undefined;
   const isPlaying = playing === clipId(kind, clipKey);
-  const what = kind === "s" ? "sonido" : "palabra";
 
   return (
     <button
@@ -24,7 +25,7 @@ export function Clip({ kind, clipKey, children, variant = "inline", className = 
       data-state={isPlaying ? "playing" : available ? "ready" : "missing"}
       disabled={!available}
       onClick={() => play(kind, clipKey)}
-      title={available ? `Escuchar ${what}: ${clipKey}` : `Grabación pendiente (${clipKey})`}
+      title={!available ? ui.pending(clipKey) : kind === "s" ? ui.listenSound(clipKey) : ui.listenWord(clipKey)}
       lang="ru"
     >
       <span className="clip__label">{children ?? clipKey}</span>

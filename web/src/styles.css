@@ -133,9 +133,9 @@ code {
   font-size: 0.85rem;
 }
 
-/* ── Переключатель темы ─────────────────────────────────── */
+/* ── Переключатели языка и темы ─────────────────────────── */
 
-.theme-switch {
+.segmented {
   display: inline-flex;
   flex: none;
   padding: 3px;
@@ -143,21 +143,26 @@ code {
   border-radius: 999px;
   background: var(--surface-2);
 }
-.theme-switch button {
+.segmented button {
   display: grid;
   place-items: center;
-  width: 30px;
+  min-width: 30px;
   height: 26px;
+  padding: 0 0.45rem;
   border: 0;
   border-radius: 999px;
   background: transparent;
   color: var(--muted);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
   cursor: pointer;
 }
-.theme-switch button:hover {
+.segmented button:hover {
   color: var(--ink);
 }
-.theme-switch button[aria-pressed="true"] {
+.segmented button[aria-pressed="true"] {
   background: var(--surface);
   color: var(--ink);
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.15);

@@ -1,29 +1,31 @@
-// Повторяет JSON из server/content.go.
+// Повторяет JSON из server/content.go. Text — строка или переводы {es, en, ru}.
+
+import type { Text } from "./i18n";
 
 export type Page = {
-  title: string;
+  title: Text;
   sections: Section[];
 };
 
 export type Section = {
   id: string;
-  title?: string;
+  title?: Text;
   blocks: Block[];
 };
 
 export type Block =
-  | { type: "paragraph"; text: string }
-  | { type: "callout"; text: string }
-  | { type: "list"; items: string[]; style?: "focus" }
-  | { type: "table"; columns: string[]; rows: string[][] }
+  | { type: "paragraph"; text: Text }
+  | { type: "callout"; text: Text }
+  | { type: "list"; items: Text[]; style?: "focus" }
+  | { type: "table"; columns: Text[]; rows: Text[][] }
   | { type: "alphabet"; letters: LetterRow[] };
 
 export type LetterRow = {
   letter: string;
   sound?: string;
-  ipa: string;
-  es: string;
-  en: string;
+  ipa: Text;
+  spanish: Text; // на что похоже в испанском
+  english: Text; // на что похоже в английском
   example: string;
   focus?: boolean;
 };
