@@ -5,6 +5,7 @@ type Player = {
   urlOf(kind: ClipKind, key: string): string | undefined;
   playing: string | null;
   play(kind: ClipKind, key: string): void;
+  playUrl(id: string, url: string): void; // звук не со страницы — например, вариант в админке
 };
 
 const PlayerContext = createContext<Player | null>(null);
@@ -33,26 +34,29 @@ export function PlayerProvider({ recordings, children }: { recordings: Record<st
 
   const urlOf = useCallback((kind: ClipKind, key: string) => recordings[clipId(kind, key)], [recordings]);
 
+  const playUrl = useCallback((id: string, src: string) => {
+    const a = audio.current;
+    if (!a) return;
+    const mine = ++attempt.current;
+    a.pause();
+    if (a.getAttribute("src") !== src) a.src = src;
+    a.currentTime = 0;
+    setPlaying(id);
+    // Прерванный следующим нажатием play() отклоняется — это не ошибка текущего звука.
+    a.play().catch(() => {
+      if (attempt.current === mine) setPlaying(null);
+    });
+  }, []);
+
   const play = useCallback(
     (kind: ClipKind, key: string) => {
-      const a = audio.current;
       const src = urlOf(kind, key);
-      if (!a || !src) return;
-      const id = clipId(kind, key);
-      const mine = ++attempt.current;
-      a.pause();
-      if (a.getAttribute("src") !== src) a.src = src;
-      a.currentTime = 0;
-      setPlaying(id);
-      // Прерванный следующим нажатием play() отклоняется — это не ошибка текущего звука.
-      a.play().catch(() => {
-        if (attempt.current === mine) setPlaying(null);
-      });
+      if (src) playUrl(clipId(kind, key), src);
     },
-    [urlOf],
+    [urlOf, playUrl],
   );
 
-  const value = useMemo(() => ({ urlOf, playing, play }), [urlOf, playing, play]);
+  const value = useMemo(() => ({ urlOf, playing, play, playUrl }), [urlOf, playing, play, playUrl]);
   return <PlayerContext.Provider value={value}>{children}</PlayerContext.Provider>;
 }
 

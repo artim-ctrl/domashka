@@ -1,0 +1,406 @@
+{
+  "s:а": {
+    "voice": "silero-xenia",
+    "text": "+а"
+  },
+  "s:б": {
+    "voice": "silero-xenia",
+    "text": "б+э"
+  },
+  "s:в": {
+    "voice": "silero-xenia",
+    "text": "в+э"
+  },
+  "s:г": {
+    "voice": "silero-xenia",
+    "text": "г+э"
+  },
+  "s:д": {
+    "voice": "silero-xenia",
+    "text": "д+э"
+  },
+  "s:е": {
+    "voice": "silero-xenia",
+    "text": "+е"
+  },
+  "s:ж": {
+    "voice": "silero-eugene",
+    "text": "жж"
+  },
+  "s:з": {
+    "voice": "silero-eugene",
+    "text": "зз"
+  },
+  "s:и": {
+    "voice": "silero-xenia",
+    "text": "+и"
+  },
+  "s:й": {
+    "voice": "silero-eugene",
+    "text": "ййй"
+  },
+  "s:к": {
+    "voice": "silero-xenia",
+    "text": "к+а"
+  },
+  "s:л": {
+    "voice": "silero-xenia",
+    "text": "+эл"
+  },
+  "s:ль": {
+    "voice": "silero-aidar",
+    "text": "л+ь"
+  },
+  "s:м": {
+    "voice": "silero-eugene",
+    "text": "+эм"
+  },
+  "s:н": {
+    "voice": "silero-eugene",
+    "text": "+эн"
+  },
+  "s:нь": {
+    "voice": "silero-xenia",
+    "text": "н+я"
+  },
+  "s:о": {
+    "voice": "silero-xenia",
+    "text": "+о"
+  },
+  "s:п": {
+    "voice": "silero-xenia",
+    "text": "п+э"
+  },
+  "s:р": {
+    "voice": "silero-xenia",
+    "text": "+эр"
+  },
+  "s:с": {
+    "voice": "silero-xenia",
+    "text": "+эс"
+  },
+  "s:т": {
+    "voice": "silero-xenia",
+    "text": "т+э"
+  },
+  "s:ть": {
+    "voice": "mit-dmitriy",
+    "text": "т+ь"
+  },
+  "s:у": {
+    "voice": "silero-xenia",
+    "text": "+у"
+  },
+  "s:ф": {
+    "voice": "silero-aidar",
+    "text": "ф+э"
+  },
+  "s:х": {
+    "voice": "silero-xenia",
+    "text": "х+э"
+  },
+  "s:ц": {
+    "voice": "silero-eugene",
+    "text": "ц+э"
+  },
+  "s:ч": {
+    "voice": "silero-xenia",
+    "text": "ч+э"
+  },
+  "s:ш": {
+    "voice": "silero-xenia",
+    "text": "ш+э"
+  },
+  "s:щ": {
+    "voice": "silero-xenia",
+    "text": "щ+э"
+  },
+  "s:ы": {
+    "voice": "mit-zinaida",
+    "text": "+ы"
+  },
+  "s:э": {
+    "voice": "silero-xenia",
+    "text": "+э"
+  },
+  "s:ю": {
+    "voice": "silero-xenia",
+    "text": "+ю"
+  },
+  "s:я": {
+    "voice": "silero-xenia",
+    "text": "+я"
+  },
+  "s:ё": {
+    "voice": "silero-xenia",
+    "text": "+ё"
+  },
+  "w:баба": {
+    "voice": "silero-xenia",
+    "text": "б+аба"
+  },
+  "w:база": {
+    "voice": "silero-xenia",
+    "text": "б+аза"
+  },
+  "w:бил": {
+    "voice": "silero-xenia",
+    "text": "б+ил"
+  },
+  "w:бить": {
+    "voice": "silero-xenia",
+    "text": "б+ить"
+  },
+  "w:брат": {
+    "voice": "silero-xenia",
+    "text": "бр+ат"
+  },
+  "w:брать": {
+    "voice": "silero-xenia",
+    "text": "бр+ать"
+  },
+  "w:быть": {
+    "voice": "silero-xenia",
+    "text": "б+ыть"
+  },
+  "w:ваза": {
+    "voice": "silero-xenia",
+    "text": "в+аза"
+  },
+  "w:вил": {
+    "voice": "silero-xenia",
+    "text": "в+ил"
+  },
+  "w:вода": {
+    "voice": "silero-kseniya",
+    "text": "вод+а"
+  },
+  "w:год": {
+    "voice": "silero-xenia",
+    "text": "г+од"
+  },
+  "w:гол": {
+    "voice": "silero-xenia",
+    "text": "г+ол"
+  },
+  "w:день": {
+    "voice": "silero-xenia",
+    "text": "д+ень"
+  },
+  "w:дом": {
+    "voice": "silero-xenia",
+    "text": "д+ом"
+  },
+  "w:дуб": {
+    "voice": "silero-xenia",
+    "text": "д+уб"
+  },
+  "w:ель": {
+    "voice": "silero-kseniya",
+    "text": "+ель"
+  },
+  "w:жаба": {
+    "voice": "silero-xenia",
+    "text": "ж+аба"
+  },
+  "w:жар": {
+    "voice": "silero-xenia",
+    "text": "ж+ар"
+  },
+  "w:жить": {
+    "voice": "silero-xenia",
+    "text": "ж+ить"
+  },
+  "w:зуб": {
+    "voice": "silero-xenia",
+    "text": "з+уб"
+  },
+  "w:кон": {
+    "voice": "silero-xenia",
+    "text": "к+он"
+  },
+  "w:конь": {
+    "voice": "silero-xenia",
+    "text": "к+онь"
+  },
+  "w:кот": {
+    "voice": "silero-xenia",
+    "text": "к+от"
+  },
+  "w:луна": {
+    "voice": "silero-xenia",
+    "text": "лун+а"
+  },
+  "w:май": {
+    "voice": "silero-xenia",
+    "text": "м+ай"
+  },
+  "w:мама": {
+    "voice": "silero-kseniya",
+    "text": "м+ама"
+  },
+  "w:ме": {
+    "voice": "silero-xenia",
+    "text": "м+е"
+  },
+  "w:мил": {
+    "voice": "silero-aidar",
+    "text": "м+ил"
+  },
+  "w:мир": {
+    "voice": "silero-xenia",
+    "text": "м+ир"
+  },
+  "w:миска": {
+    "voice": "silero-xenia",
+    "text": "м+иска"
+  },
+  "w:мишка": {
+    "voice": "silero-xenia",
+    "text": "м+ишка"
+  },
+  "w:молоко": {
+    "voice": "silero-xenia",
+    "text": "молок+о"
+  },
+  "w:мы": {
+    "voice": "silero-xenia",
+    "text": "м+ы"
+  },
+  "w:мыл": {
+    "voice": "silero-xenia",
+    "text": "м+ыл"
+  },
+  "w:мю": {
+    "voice": "silero-xenia",
+    "text": "м+ю"
+  },
+  "w:мя": {
+    "voice": "silero-xenia",
+    "text": "м+я"
+  },
+  "w:мё": {
+    "voice": "silero-xenia",
+    "text": "м+ё"
+  },
+  "w:нос": {
+    "voice": "silero-xenia",
+    "text": "н+ос"
+  },
+  "w:объект": {
+    "voice": "silero-xenia",
+    "text": "объ+ект"
+  },
+  "w:папа": {
+    "voice": "silero-xenia",
+    "text": "п+апа"
+  },
+  "w:рыба": {
+    "voice": "silero-xenia",
+    "text": "р+ыба"
+  },
+  "w:сок": {
+    "voice": "silero-xenia",
+    "text": "с+ок"
+  },
+  "w:стол": {
+    "voice": "silero-xenia",
+    "text": "ст+ол"
+  },
+  "w:суп": {
+    "voice": "silero-xenia",
+    "text": "с+уп"
+  },
+  "w:ты": {
+    "voice": "silero-xenia",
+    "text": "т+ы"
+  },
+  "w:фото": {
+    "voice": "silero-xenia",
+    "text": "ф+ото"
+  },
+  "w:хлеб": {
+    "voice": "silero-kseniya",
+    "text": "хл+еб"
+  },
+  "w:цвет": {
+    "voice": "silero-xenia",
+    "text": "цв+ет"
+  },
+  "w:цех": {
+    "voice": "silero-xenia",
+    "text": "ц+ех"
+  },
+  "w:чай": {
+    "voice": "silero-xenia",
+    "text": "ч+ай"
+  },
+  "w:чашка": {
+    "voice": "silero-xenia",
+    "text": "ч+ашка"
+  },
+  "w:честь": {
+    "voice": "silero-xenia",
+    "text": "ч+есть"
+  },
+  "w:чех": {
+    "voice": "silero-xenia",
+    "text": "ч+ех"
+  },
+  "w:шапка": {
+    "voice": "silero-xenia",
+    "text": "ш+апка"
+  },
+  "w:шар": {
+    "voice": "silero-xenia",
+    "text": "ш+ар"
+  },
+  "w:шашка": {
+    "voice": "silero-xenia",
+    "text": "ш+ашка"
+  },
+  "w:шесть": {
+    "voice": "silero-xenia",
+    "text": "ш+есть"
+  },
+  "w:шить": {
+    "voice": "silero-xenia",
+    "text": "ш+ить"
+  },
+  "w:шок": {
+    "voice": "silero-xenia",
+    "text": "ш+ок"
+  },
+  "w:шуба": {
+    "voice": "silero-xenia",
+    "text": "ш+уба"
+  },
+  "w:шёлк": {
+    "voice": "silero-xenia",
+    "text": "ш+ёлк"
+  },
+  "w:щука": {
+    "voice": "silero-xenia",
+    "text": "щ+ука"
+  },
+  "w:щётка": {
+    "voice": "silero-xenia",
+    "text": "щ+ётка"
+  },
+  "w:это": {
+    "voice": "silero-xenia",
+    "text": "+это"
+  },
+  "w:юг": {
+    "voice": "silero-xenia",
+    "text": "+юг"
+  },
+  "w:я": {
+    "voice": "silero-xenia",
+    "text": "+я"
+  },
+  "w:ёлка": {
+    "voice": "silero-xenia",
+    "text": "+ёлка"
+  }
+}

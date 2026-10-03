@@ -10,16 +10,24 @@ install: ## Установить зависимости интерфейса
 	cd web && npm install
 
 .PHONY: api
-api: ## Запустить сервер на :8080 (записи берёт из audio/)
-	cd server && go run . -audio ../audio
+api: ## Запустить сервер на :8080 с админкой (is_admin=true в localStorage)
+	cd server && go run . -audio ../audio -admin
 
 .PHONY: web
 web: ## Запустить интерфейс на :5180 (Vite проксирует /api на сервер)
 	cd web && npm run dev
 
 .PHONY: missing
-missing: ## Показать, какие записи ещё не сделаны и куда их положить
+missing: ## Показать, каких записей ещё нет
 	cd server && go run . -audio ../audio -missing
+
+.PHONY: voices
+voices: ## Заранее сделать варианты озвучки всеми голосами, где их ещё нет
+	cd server && go run . -voices
+
+.PHONY: voices-all
+voices-all: ## Сделать все варианты озвучки заново (например, после правок speech.json)
+	cd server && go run . -voices-all
 
 .PHONY: check
 check: ## Проверить сервер и типы интерфейса
@@ -32,5 +40,5 @@ build: ## Собрать интерфейс и бинарь сервера в bi
 	cd server && go build -o ../bin/domashka .
 
 .PHONY: serve
-serve: build ## Собрать и запустить всё одним сервером на :8080
+serve: build ## Собрать и запустить всё одним сервером на :8080 (без админки, как для учеников)
 	./bin/domashka -audio audio -static web/dist

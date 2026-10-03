@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useAdmin } from "../admin/context";
 import { useI18n } from "../i18n";
 import { clipId, usePlayer } from "../player";
 import type { ClipKind } from "../types";
@@ -12,19 +13,27 @@ type Props = {
 };
 
 // Кнопка, которая проигрывает запись звука или слова. Без записи — видна, но неактивна.
+// В админке ещё и открывает панель выбора озвучки этой записи.
 export function Clip({ kind, clipKey, children, variant = "inline", className = "" }: Props) {
   const { urlOf, playing, play } = usePlayer();
   const { ui } = useI18n();
+  const admin = useAdmin();
+  const id = clipId(kind, clipKey);
   const available = urlOf(kind, clipKey) !== undefined;
-  const isPlaying = playing === clipId(kind, clipKey);
+  const isPlaying = playing === id;
 
   return (
     <button
       type="button"
       className={`clip clip--${variant} clip--${kind === "s" ? "sound" : "word"} ${className}`}
       data-state={isPlaying ? "playing" : available ? "ready" : "missing"}
-      disabled={!available}
-      onClick={() => play(kind, clipKey)}
+      data-clip={id}
+      data-admin={admin.enabled ? (admin.active === id ? "active" : admin.choices[id] ? "chosen" : "unchosen") : undefined}
+      disabled={!available && !admin.enabled}
+      onClick={() => {
+        play(kind, clipKey);
+        if (admin.enabled) admin.open(id);
+      }}
       title={!available ? ui.pending(clipKey) : kind === "s" ? ui.listenSound(clipKey) : ui.listenWord(clipKey)}
       lang="ru"
     >

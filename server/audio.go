@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 )
 
 type Kind string
@@ -46,11 +47,12 @@ func init() {
 // после обновления страницы, без перезапуска сервера.
 type Library struct {
 	dir string
+	mu  sync.Mutex // выбор записи — по одному
 }
 
 type Recording struct {
 	Path    string
-	Version int64 // время изменения файла — чтобы перезаписанный звук не брался из кэша
+	Version int64 // время изменения файла (мс) — чтобы перезаписанный звук не брался из кэша
 }
 
 func (l *Library) Scan() (map[Clip]Recording, error) {
@@ -83,7 +85,7 @@ func (l *Library) Scan() (map[Clip]Recording, error) {
 				return nil, err
 			}
 			rank[clip] = r
-			found[clip] = Recording{Path: filepath.Join(dir, e.Name()), Version: info.ModTime().Unix()}
+			found[clip] = Recording{Path: filepath.Join(dir, e.Name()), Version: info.ModTime().UnixMilli()}
 		}
 	}
 	return found, nil
@@ -98,7 +100,7 @@ func (l *Library) Lookup(c Clip) (Recording, bool, error) {
 	return rec, ok, nil
 }
 
-// ExpectedPath — куда положить запись, которой пока нет.
+// ExpectedPath — где появится запись, которой пока нет.
 func (l *Library) ExpectedPath(c Clip) string {
 	return filepath.Join(l.dir, c.Kind.dir(), c.Key+".m4a")
 }

@@ -17,6 +17,12 @@ import (
 //go:embed content/page.json
 var pageJSON []byte
 
+// Что говорить синтезатору для каждой записи: «s:ш» → «шшш», «w:молоко» → «молок+о».
+// «+» перед гласной — ударение.
+//
+//go:embed content/speech.json
+var speechJSON []byte
+
 // Языки интерфейса; первый — запасной.
 var langs = []string{"es", "en", "ru"}
 
@@ -78,6 +84,8 @@ func (t Text) check() error {
 type Page struct {
 	Title    Text      `json:"title"`
 	Sections []Section `json:"sections"`
+
+	speech map[string]string // id записи → текст для синтезатора
 }
 
 type Section struct {
@@ -131,7 +139,52 @@ func loadPage() (*Page, error) {
 	if err := errors.Join(errs...); err != nil {
 		return nil, fmt.Errorf("content/page.json:\n%w", err)
 	}
+	if err := json.Unmarshal(speechJSON, &p.speech); err != nil {
+		return nil, fmt.Errorf("content/speech.json: %w", err)
+	}
+	if err := p.checkSpeech(); err != nil {
+		return nil, fmt.Errorf("content/speech.json:\n%w", err)
+	}
 	return &p, nil
+}
+
+// Одиночную согласную синтезатор читает названием буквы («ш» → «ша»), поэтому звуки
+// записаны иначе: протяжные — «шшш», прочие — слогом «б+а»; а у слов текст — само слово
+// с ударением, так что опечатка в нём ловится сразу.
+func (p *Page) checkSpeech() error {
+	var errs []error
+	used := map[string]bool{}
+	for _, c := range p.Clips() {
+		used[c.ID()] = true
+		text, ok := p.speech[c.ID()]
+		switch {
+		case !ok:
+			errs = append(errs, fmt.Errorf("нет текста для %s", c.ID()))
+		case c.Kind == KindWord && strings.ReplaceAll(text, "+", "") != c.Key:
+			errs = append(errs, fmt.Errorf("%s: %q — это не то же слово", c.ID(), text))
+		case c.Kind == KindSound && !strings.ContainsAny(c.Key, "аоуыиэеёюя") && text == c.Key:
+			errs = append(errs, fmt.Errorf("%s: согласная одна — синтезатор прочитает название буквы", c.ID()))
+		}
+	}
+	for id := range p.speech {
+		if !used[id] {
+			errs = append(errs, fmt.Errorf("%s нет на странице", id))
+		}
+	}
+	return errors.Join(errs...)
+}
+
+// Spoken — что сказать синтезатору для записи.
+func (p *Page) Spoken(c Clip) string { return p.speech[c.ID()] }
+
+// FindClip — запись страницы по ключу из адреса (без учёта регистра и ударения).
+func (p *Page) FindClip(kind Kind, key string) (Clip, bool) {
+	for _, c := range p.Clips() {
+		if c.Kind == kind && normalizeKey(c.Key) == normalizeKey(key) {
+			return c, true
+		}
+	}
+	return Clip{}, false
 }
 
 func (p *Page) eachText(fn func(Text)) {

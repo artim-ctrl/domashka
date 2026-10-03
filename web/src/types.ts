@@ -37,4 +37,17 @@ export type PageResponse = {
   // «s:ш» / «w:дом» → адрес записи; чего нет — ещё не записано.
   recordings: Record<string, string>;
   total: number;
+  // Только если сервер запущен с -admin.
+  admin?: boolean;
+  clips?: string[]; // id записей в порядке страницы
+  choices?: Record<string, Choice>;
 };
+
+// Чем озвучена запись: голос и текст для синтезатора («молок+о»).
+export type Choice = { voice: string; text: string };
+
+export type Voice = { id: string; label: string; license: string };
+
+export type Candidate = { voice: string; url: string };
+
+export type ClipState = { text: string; candidates: Candidate[]; chosen?: Choice };
