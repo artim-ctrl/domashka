@@ -42,3 +42,15 @@ build: ## Собрать интерфейс и бинарь сервера в bi
 .PHONY: serve
 serve: build ## Собрать и запустить всё одним сервером на :8080 (без админки, как для учеников)
 	./bin/domashka -audio audio -static web/dist
+
+.PHONY: docker-build
+docker-build: ## Собрать прод-образ domashka:latest
+	docker build -t domashka:latest .
+
+.PHONY: docker-up
+docker-up: ## Поднять прод-контейнер (compose.yaml) на :8080
+	docker compose up -d --build
+
+.PHONY: docker-down
+docker-down: ## Остановить прод-контейнер (штатно, через SIGTERM)
+	docker compose down

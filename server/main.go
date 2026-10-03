@@ -1,12 +1,20 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
+	"os"
+	"os/signal"
+	"strings"
+	"syscall"
+	"time"
 )
 
 func main() {
@@ -19,7 +27,16 @@ func main() {
 	missing := flag.Bool("missing", false, "показать, каких записей не хватает, и выйти")
 	pregen := flag.Bool("voices", false, "сгенерировать варианты всеми голосами там, где их нет, и выйти")
 	pregenAll := flag.Bool("voices-all", false, "сгенерировать все варианты заново и выйти")
+	healthcheck := flag.Bool("healthcheck", false, "проверить, что сервер на -addr отвечает, и выйти (для Docker)")
 	flag.Parse()
+
+	if *healthcheck {
+		if err := checkHealth(*addr); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 
 	page, err := loadPage()
 	if err != nil {
@@ -46,6 +63,7 @@ func main() {
 
 	s := &server{page: page, lib: lib, cands: cands, tts: tts, admin: *admin}
 	mux := http.NewServeMux()
+	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { fmt.Fprintln(w, "ok") })
 	mux.HandleFunc("GET /api/page", s.handlePage)
 	mux.HandleFunc("GET /api/audio/{kind}/{key}", s.handleAudio)
 	if *admin {
@@ -56,7 +74,7 @@ func main() {
 		mux.HandleFunc("GET /api/admin/candidates/{kind}/{key}/{voice}", s.withClip(s.handleCandidate))
 	}
 	if *staticDir != "" {
-		mux.Handle("GET /", http.FileServer(http.Dir(*staticDir)))
+		mux.Handle("GET /", static(*staticDir))
 	}
 
 	mode := ""
@@ -64,7 +82,67 @@ func main() {
 		mode = ", админка включена"
 	}
 	log.Printf("domashka слушает http://%s (записи: %s%s)", *addr, *audioDir, mode)
-	log.Fatal(http.ListenAndServe(*addr, mux))
+	if err := serve(*addr, mux); err != nil {
+		log.Fatal(err)
+	}
+}
+
+// serve работает до SIGINT/SIGTERM (Ctrl+C, docker stop), а потом даёт текущим
+// запросам до 10 секунд закончиться.
+func serve(addr string, h http.Handler) error {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	srv := &http.Server{Addr: addr, Handler: h, ReadHeaderTimeout: 10 * time.Second}
+	failed := make(chan error, 1)
+	go func() { failed <- srv.ListenAndServe() }()
+
+	select {
+	case err := <-failed:
+		return err
+	case <-ctx.Done():
+	}
+	log.Print("останавливаюсь…")
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		return err
+	}
+	return nil
+}
+
+// static раздаёт собранный интерфейс. У файлов из assets/ в имени хэш содержимого —
+// их можно кэшировать навсегда; index.html — всегда проверять, иначе не увидишь новую версию.
+func static(dir string) http.Handler {
+	files := http.FileServer(http.Dir(dir))
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.URL.Path, "/assets/") {
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		} else {
+			w.Header().Set("Cache-Control", "no-cache")
+		}
+		files.ServeHTTP(w, r)
+	})
+}
+
+func checkHealth(addr string) error {
+	host, port, err := net.SplitHostPort(addr)
+	if err != nil {
+		return err
+	}
+	if host == "" || host == "0.0.0.0" || host == "::" {
+		host = "127.0.0.1"
+	}
+	client := http.Client{Timeout: 3 * time.Second}
+	resp, err := client.Get("http://" + net.JoinHostPort(host, port) + "/healthz")
+	if err != nil {
+		return err
+	}
+	resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("healthz: %s", resp.Status)
+	}
+	return nil
 }
 
 type server struct {

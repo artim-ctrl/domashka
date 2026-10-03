@@ -1,0 +1,15 @@
+# Прод: docker compose up -d --build. Наружу — через обратный прокси с TLS (Caddy, nginx);
+# порт на хосте меняется переменной PORT.
+services:
+  domashka:
+    build: .
+    image: domashka:latest
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:8080"
+    # Сервер ничего не пишет на диск: записи и интерфейс вшиты в образ.
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    # SIGTERM → сервер дожидается текущих запросов (до 10 с) и выходит.
+    stop_grace_period: 15s
