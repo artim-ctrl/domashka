@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"mime"
 	"os"
 	"path/filepath"
 	"strings"
-	"sync"
 )
 
 type Kind string
@@ -48,12 +46,11 @@ func init() {
 // после обновления страницы, без перезапуска сервера.
 type Library struct {
 	dir string
-	mu  sync.Mutex // сохранения по одному
 }
 
 type Recording struct {
 	Path    string
-	Version int64 // время изменения файла (мс) — чтобы перезаписанный звук не брался из кэша
+	Version int64 // время изменения файла — чтобы перезаписанный звук не брался из кэша
 }
 
 func (l *Library) Scan() (map[Clip]Recording, error) {
@@ -86,7 +83,7 @@ func (l *Library) Scan() (map[Clip]Recording, error) {
 				return nil, err
 			}
 			rank[clip] = r
-			found[clip] = Recording{Path: filepath.Join(dir, e.Name()), Version: info.ModTime().UnixMilli()}
+			found[clip] = Recording{Path: filepath.Join(dir, e.Name()), Version: info.ModTime().Unix()}
 		}
 	}
 	return found, nil
@@ -99,56 +96,6 @@ func (l *Library) Lookup(c Clip) (Recording, bool, error) {
 	}
 	rec, ok := all[Clip{Kind: c.Kind, Key: normalizeKey(c.Key)}]
 	return rec, ok, nil
-}
-
-// Save кладёт запись как <ключ><ext> и убирает прежние файлы этой записи в других
-// форматах — иначе, например, старый .m4a перебил бы новый .wav.
-func (l *Library) Save(c Clip, ext string, body io.Reader) (Recording, error) {
-	l.mu.Lock()
-	defer l.mu.Unlock()
-
-	dir := filepath.Join(l.dir, c.Kind.dir())
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return Recording{}, err
-	}
-	tmp, err := os.CreateTemp(dir, ".upload-*.tmp")
-	if err != nil {
-		return Recording{}, err
-	}
-	defer os.Remove(tmp.Name()) // после переименования уже нечего удалять
-	if _, err := io.Copy(tmp, body); err != nil {
-		tmp.Close()
-		return Recording{}, err
-	}
-	if err := tmp.Close(); err != nil {
-		return Recording{}, err
-	}
-
-	final := filepath.Join(dir, c.Key+ext)
-	if err := os.Rename(tmp.Name(), final); err != nil {
-		return Recording{}, err
-	}
-	entries, err := os.ReadDir(dir)
-	if err != nil {
-		return Recording{}, err
-	}
-	for _, e := range entries {
-		name := e.Name()
-		path := filepath.Join(dir, name)
-		if path == final || e.IsDir() || extRank(strings.ToLower(filepath.Ext(name))) < 0 {
-			continue
-		}
-		if normalizeKey(strings.TrimSuffix(name, filepath.Ext(name))) == normalizeKey(c.Key) {
-			if err := os.Remove(path); err != nil {
-				return Recording{}, err
-			}
-		}
-	}
-	info, err := os.Stat(final)
-	if err != nil {
-		return Recording{}, err
-	}
-	return Recording{Path: final, Version: info.ModTime().UnixMilli()}, nil
 }
 
 // ExpectedPath — куда положить запись, которой пока нет.
