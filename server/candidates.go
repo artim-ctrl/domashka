@@ -41,7 +41,7 @@ func (cs *Candidates) List(c Clip) ([]Candidate, string, error) {
 		}
 		out = append(out, Candidate{
 			Voice: v.ID,
-			URL:   fmt.Sprintf("/api/admin/candidates/%s/%s/%s?v=%d", c.Kind, url.PathEscape(c.Key), v.ID, info.ModTime().UnixMilli()),
+			URL:   fmt.Sprintf("api/admin/candidates/%s/%s/%s?v=%d", c.Kind, url.PathEscape(c.Key), v.ID, info.ModTime().UnixMilli()),
 		})
 	}
 	text, err := os.ReadFile(filepath.Join(cs.clipDir(c), "text.txt"))

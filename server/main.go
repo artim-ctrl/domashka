@@ -21,6 +21,7 @@ func main() {
 	addr := flag.String("addr", "127.0.0.1:8080", "адрес HTTP-сервера")
 	audioDir := flag.String("audio", "../audio", "папка с записями (внутри sounds/ и words/)")
 	staticDir := flag.String("static", "", "собранный интерфейс (web/dist); пусто — не раздавать")
+	base := flag.String("base", os.Getenv("BASE_PATH"), "префикс адреса приложения, например /domashka (по умолчанию $BASE_PATH)")
 	admin := flag.Bool("admin", false, "разрешить админку: генерацию вариантов и выбор записи (macOS)")
 	candDir := flag.String("candidates", "../candidates", "папка для вариантов озвучки")
 	ttsScript := flag.String("tts", "../tools/tts.py", "скрипт синтезатора Silero")
@@ -61,39 +62,48 @@ func main() {
 		return
 	}
 
-	s := &server{page: page, lib: lib, cands: cands, tts: tts, admin: *admin}
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { fmt.Fprintln(w, "ok") })
-	mux.HandleFunc("GET /api/page", s.handlePage)
-	mux.HandleFunc("GET /api/audio/{kind}/{key}", s.handleAudio)
-	if *admin {
-		mux.HandleFunc("GET /api/admin/voices", s.handleVoices)
-		mux.HandleFunc("GET /api/admin/clips/{kind}/{key}", s.withClip(s.handleClip))
-		mux.HandleFunc("POST /api/admin/clips/{kind}/{key}/candidates/{voice}", s.withClip(s.handleGenerate))
-		mux.HandleFunc("POST /api/admin/clips/{kind}/{key}/choose", s.withClip(s.handleChoose))
-		mux.HandleFunc("GET /api/admin/candidates/{kind}/{key}/{voice}", s.withClip(s.handleCandidate))
+	if !*admin {
+		if err := lib.Freeze(); err != nil {
+			log.Fatal(err)
+		}
 	}
-	if *staticDir != "" {
-		mux.Handle("GET /", static(*staticDir))
+	s := &server{page: page, lib: lib, cands: cands, tts: tts, admin: *admin}
+	h, err := s.handler(*staticDir, *base)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	mode := ""
 	if *admin {
 		mode = ", админка включена"
 	}
-	log.Printf("domashka слушает http://%s (записи: %s%s)", *addr, *audioDir, mode)
-	if err := serve(*addr, mux); err != nil {
+	log.Printf("domashka слушает http://%s%s/ (записи: %s%s)", *addr, strings.TrimRight(*base, "/"), *audioDir, mode)
+	// Генерация в админке бывает долгой: в первый раз uv ставит torch и грузит модели.
+	writeTimeout := 30 * time.Second
+	if *admin {
+		writeTimeout = 10 * time.Minute
+	}
+	if err := serve(*addr, h, writeTimeout); err != nil {
 		log.Fatal(err)
 	}
 }
 
 // serve работает до SIGINT/SIGTERM (Ctrl+C, docker stop), а потом даёт текущим
-// запросам до 10 секунд закончиться.
-func serve(addr string, h http.Handler) error {
+// запросам до 10 секунд закончиться. Таймауты — чтобы соединение, которое молчит, медленно
+// читает или просто висит открытым, не держало ресурсы сервера вечно.
+func serve(addr string, h http.Handler, writeTimeout time.Duration) error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	srv := &http.Server{Addr: addr, Handler: h, ReadHeaderTimeout: 10 * time.Second}
+	srv := &http.Server{
+		Addr:              addr,
+		Handler:           h,
+		ReadHeaderTimeout: 10 * time.Second,
+		ReadTimeout:       30 * time.Second,
+		WriteTimeout:      writeTimeout,
+		IdleTimeout:       60 * time.Second,
+		MaxHeaderBytes:    64 << 10,
+	}
 	failed := make(chan error, 1)
 	go func() { failed <- srv.ListenAndServe() }()
 
@@ -109,20 +119,6 @@ func serve(addr string, h http.Handler) error {
 		return err
 	}
 	return nil
-}
-
-// static раздаёт собранный интерфейс. У файлов из assets/ в имени хэш содержимого —
-// их можно кэшировать навсегда; index.html — всегда проверять, иначе не увидишь новую версию.
-func static(dir string) http.Handler {
-	files := http.FileServer(http.Dir(dir))
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasPrefix(r.URL.Path, "/assets/") {
-			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
-		} else {
-			w.Header().Set("Cache-Control", "no-cache")
-		}
-		files.ServeHTTP(w, r)
-	})
 }
 
 func checkHealth(addr string) error {
@@ -191,8 +187,9 @@ func (s *server) handlePage(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, resp)
 }
 
+// recordingURL — относительный адрес: страница может жить под префиксом (/domashka/).
 func recordingURL(c Clip, rec Recording) string {
-	return fmt.Sprintf("/api/audio/%s/%s?v=%d", c.Kind, url.PathEscape(c.Key), rec.Version)
+	return fmt.Sprintf("api/audio/%s/%s?v=%d", c.Kind, url.PathEscape(c.Key), rec.Version)
 }
 
 func (s *server) handleAudio(w http.ResponseWriter, r *http.Request) {

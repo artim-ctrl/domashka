@@ -6,15 +6,19 @@
 #   docker build -t domashka .                              # под текущую платформу
 #   docker buildx build --platform linux/amd64 -t domashka .  # под обычный сервер с Mac
 
+# Базовые образы закреплены по digest: тег могут перепривязать к другому образу, digest — нет.
+# Обновляет их Dependabot (.github/dependabot.yml).
+#
 # Сборочные стадии идут на родной платформе машины: результат у них переносимый.
-FROM --platform=$BUILDPLATFORM node:26-alpine AS web
+FROM --platform=$BUILDPLATFORM node:26-alpine@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS web
 WORKDIR /src/web
 COPY web/package.json web/package-lock.json ./
-RUN npm ci
+# Скрипты установки пакетов не нужны (единственный — у fsevents для macOS), а запускать их — риск.
+RUN npm ci --ignore-scripts
 COPY web/ ./
 RUN npm run build
 
-FROM --platform=$BUILDPLATFORM golang:1.27-alpine AS server
+FROM --platform=$BUILDPLATFORM golang:1.27-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414 AS server
 WORKDIR /src/server
 COPY server/ ./
 # Тесты проверяют page.json и speech.json: с битым контентом образ не соберётся.
@@ -22,7 +26,7 @@ RUN CGO_ENABLED=0 go test ./...
 ARG TARGETOS TARGETARCH
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -o /out/domashka .
 
-FROM gcr.io/distroless/static-debian12:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
 WORKDIR /app
 COPY --from=server /out/domashka ./domashka
 COPY --from=web /src/web/dist ./web

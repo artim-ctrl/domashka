@@ -55,14 +55,16 @@ func TestAdminGenerateAndChoose(t *testing.T) {
 	}
 	dir := t.TempDir()
 	s := &server{page: page, lib: &Library{dir: filepath.Join(dir, "audio")}, cands: &Candidates{dir: filepath.Join(dir, "cand")}, tts: &TTS{}, admin: true}
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /api/page", s.handlePage)
-	mux.HandleFunc("GET /api/admin/clips/{kind}/{key}", s.withClip(s.handleClip))
-	mux.HandleFunc("POST /api/admin/clips/{kind}/{key}/candidates/{voice}", s.withClip(s.handleGenerate))
-	mux.HandleFunc("POST /api/admin/clips/{kind}/{key}/choose", s.withClip(s.handleChoose))
+	mux, err := s.handler("", "")
+	if err != nil {
+		t.Fatal(err)
+	}
 	call := func(method, path, body string, out any) int {
 		rec := httptest.NewRecorder()
-		mux.ServeHTTP(rec, httptest.NewRequest(method, path, strings.NewReader(body)))
+		req := httptest.NewRequest(method, path, strings.NewReader(body))
+		req.Host = "localhost:8080"
+		req.Header.Set("Content-Type", "application/json")
+		mux.ServeHTTP(rec, req)
 		if out != nil && rec.Code == http.StatusOK {
 			if err := json.NewDecoder(rec.Body).Decode(out); err != nil {
 				t.Fatal(err)

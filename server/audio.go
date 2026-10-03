@@ -43,11 +43,23 @@ func init() {
 	}
 }
 
-// Library — папка с записями. Каждый раз читается заново: новая запись видна
-// после обновления страницы, без перезапуска сервера.
+// Library — папка с записями. С админкой читается заново на каждый запрос: выбранная
+// запись видна сразу. Без админки — один раз при старте (Freeze): в проде записи вшиты
+// в образ и не меняются, а читать папку на каждый запрос — лишняя работа для чужих запросов.
 type Library struct {
-	dir string
-	mu  sync.Mutex // выбор записи — по одному
+	dir    string
+	mu     sync.Mutex // выбор записи — по одному
+	frozen map[Clip]Recording
+}
+
+// Freeze читает папку один раз; дальше Scan отдаёт этот снимок.
+func (l *Library) Freeze() error {
+	all, err := l.Scan()
+	if err != nil {
+		return err
+	}
+	l.frozen = all
+	return nil
 }
 
 type Recording struct {
@@ -56,6 +68,9 @@ type Recording struct {
 }
 
 func (l *Library) Scan() (map[Clip]Recording, error) {
+	if l.frozen != nil {
+		return l.frozen, nil
+	}
 	found := map[Clip]Recording{}
 	for _, kind := range []Kind{KindSound, KindWord} {
 		dir := filepath.Join(l.dir, kind.dir())

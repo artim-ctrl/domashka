@@ -88,7 +88,7 @@ export function App() {
         <footer className="footer">{ui.recordings(recorded, total)}</footer>
 
         {admin.enabled && <AdminPanel clips={data.clips ?? []} onChosen={onChosen} onClose={() => setActive(null)} />}
-        {adminRequested() && !data.admin && (
+        {import.meta.env.DEV && adminRequested() && !data.admin && (
           <div className="admin-pill">Админка выключена на сервере — запусти его через make api (флаг -admin).</div>
         )}
       </PlayerProvider>

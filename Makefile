@@ -54,3 +54,7 @@ docker-up: ## Поднять прод-контейнер (compose.yaml) на :80
 .PHONY: docker-down
 docker-down: ## Остановить прод-контейнер (штатно, через SIGTERM)
 	docker compose down
+
+.PHONY: deploy
+deploy: ## Собрать и выкатить на сервер по ssh: make deploy SERVER=user@host (PORT=…)
+	./deploy/deploy.sh "$(SERVER)"

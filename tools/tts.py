@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11,<3.14"
-# dependencies = ["torch", "numpy", "scipy"]
+# dependencies = ["torch==2.14.1", "numpy==2.5.3"]
 # ///
 """Синтезатор Silero для сервера domashka.
 
@@ -10,6 +10,7 @@
 в ~/.cache/domashka/silero и дальше держатся в памяти. «+» перед гласной — ударение.
 """
 
+import hashlib
 import json
 import re
 import sys
@@ -25,6 +26,14 @@ import torch  # noqa: E402
 
 RATE = 48000
 CACHE = Path.home() / ".cache" / "domashka" / "silero"
+
+# Модель Silero — это pickle, то есть код, который выполняется при загрузке. Грузим только
+# файлы с известным хэшем: подменённая модель (на сайте или в кэше) не запустится.
+# Новая модель или версия — посчитать `shasum -a 256` у скачанного файла и добавить сюда.
+MODELS = {
+    "v5_5_ru": "50081637b602126ee06cb3bc8a744d25651d2da149ee8864b9a379bfdd934437",
+    "v5_cis_base": "ba41b18f6a707ad93605a162998865e7c087153d2e010a26dd02229dab0e672a",
+}
 models = {}
 
 
@@ -32,8 +41,18 @@ def log(*args):
     print(*args, file=sys.stderr, flush=True)
 
 
+def sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def model(name: str):
     if name not in models:
+        if name not in MODELS:
+            raise ValueError(f"неизвестная модель {name}: её хэша нет в MODELS")
         path = CACHE / f"{name}.pt"
         if not path.exists():
             CACHE.mkdir(parents=True, exist_ok=True)
@@ -41,6 +60,9 @@ def model(name: str):
             log(f"tts: скачиваю {url}")
             urllib.request.urlretrieve(url, path.with_suffix(".part"))
             path.with_suffix(".part").rename(path)
+        if sha256(path) != MODELS[name]:
+            path.unlink()
+            raise ValueError(f"у модели {name} не тот хэш — файл удалён, при следующем запросе скачается заново")
         log(f"tts: загружаю модель {name}")
         models[name] = torch.package.PackageImporter(str(path)).load_pickle("tts_models", "model")
     return models[name]

@@ -10,16 +10,17 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
   return res.json();
 }
 
-export const fetchPage = () => request<PageResponse>("GET", "/api/page");
+// Адреса относительные: приложение может жить под префиксом (example.com/domashka/).
+export const fetchPage = () => request<PageResponse>("GET", "api/page");
 
 // ── Админка: id записи вида «w:дом» ──
 
 const clipPath = (id: string) => {
   const [kind, key] = [id.slice(0, 1), id.slice(2)];
-  return `/api/admin/clips/${kind}/${encodeURIComponent(key)}`;
+  return `api/admin/clips/${kind}/${encodeURIComponent(key)}`;
 };
 
-export const fetchVoices = () => request<Voice[]>("GET", "/api/admin/voices");
+export const fetchVoices = () => request<Voice[]>("GET", "api/admin/voices");
 
 export const fetchClipState = (id: string) => request<ClipState>("GET", clipPath(id));
 
