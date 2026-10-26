@@ -1,13 +1,12 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 export default defineConfig({
-  // Относительные пути к ассетам: одна сборка работает и в корне, и под префиксом (/domashka/).
-  base: "./",
-  plugins: [react()],
-  server: {
-    port: 5180,
-    strictPort: true,
-    proxy: { "/api": "http://127.0.0.1:8080" },
-  },
+    base: "./",
+    plugins: [react()],
+    server: {
+        port: 5180,
+        strictPort: true,
+        proxy: { "/api": "http://127.0.0.1:8080" },
+    },
 });

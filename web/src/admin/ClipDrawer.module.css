@@ -1,0 +1,9 @@
+.key {
+    font-family: var(--app-serif);
+    font-size: rem(28px);
+    line-height: 1;
+}
+
+.serifInput {
+    font-family: var(--app-serif);
+}

@@ -1,0 +1,86 @@
+.surface {
+    overflow: hidden;
+    background: var(--app-surface);
+}
+
+.head {
+    background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+
+    th {
+        color: var(--mantine-color-dimmed);
+        font-size: var(--mantine-font-size-xs);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+}
+
+.letter {
+    width: rem(100px);
+}
+
+.ipa {
+    color: light-dark(var(--mantine-color-teal-7), var(--mantine-color-teal-3));
+    font-size: var(--mantine-font-size-md);
+    white-space: nowrap;
+}
+
+.cards {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+        "letter ipa example"
+        "es es es"
+        "en en en";
+    gap: rem(6px) var(--mantine-spacing-md);
+    align-items: center;
+    padding: var(--mantine-spacing-md);
+    border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    .cardLetter {
+        min-width: 0;
+        grid-area: letter;
+    }
+
+    .ipa {
+        grid-area: ipa;
+    }
+
+    .cardExample {
+        min-width: 0;
+        grid-area: example;
+    }
+
+    .cardSpanish {
+        min-width: 0;
+        grid-area: es;
+    }
+
+    .cardEnglish {
+        min-width: 0;
+        grid-area: en;
+    }
+}
+
+.silent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(76px);
+    height: rem(68px);
+    border: 1px dashed light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-4));
+    border-radius: var(--mantine-radius-lg);
+    color: var(--mantine-color-dimmed);
+    font-family: var(--app-serif);
+    font-size: rem(26px);
+}

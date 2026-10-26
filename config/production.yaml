@@ -1,0 +1,11 @@
+server:
+  addr: 0.0.0.0:8080
+  base_path: /domashka
+  static_dir: /app/web
+
+content:
+  page: /app/content/page.json
+  speech: /app/content/speech.json
+
+library:
+  dir: /app/audio

@@ -1,0 +1,68 @@
+server:
+  addr: 127.0.0.1:8080
+  base_path: ""
+  static_dir: ""
+  read_buffer_size: 65536
+  body_limit: 4096
+  timeouts:
+    startup: 15s
+    read: 30s
+    write: 30s
+    admin_write: 10m
+    idle: 60s
+    shutdown: 10s
+    healthcheck: 3s
+
+content:
+  page: content/page.json
+  speech: content/speech.json
+
+library:
+  dir: audio
+  kind_dirs:
+    sounds: sounds
+    words: words
+  choices_file: choices.json
+  recording_ext: .m4a
+  formats:
+    - { ext: .m4a, content_type: audio/mp4 }
+    - { ext: .mp3, content_type: audio/mpeg }
+    - { ext: .ogg, content_type: audio/ogg }
+    - { ext: .opus, content_type: audio/ogg }
+    - { ext: .webm, content_type: audio/webm }
+    - { ext: .wav, content_type: audio/wav }
+    - { ext: .aac, content_type: audio/aac }
+
+candidates:
+  dir: candidates
+  kind_dirs:
+    sounds: sounds
+    words: words
+  text_file: text.txt
+  ext: .wav
+
+admin:
+  max_speech_text_runes: 200
+
+tts:
+  silero:
+    command: [uv, run, --quiet, --script]
+    script: tools/tts.py
+    env: [PYTHONWARNINGS=ignore]
+  say:
+    rate: 150
+  voices:
+    - { id: silero-xenia, label: Silero · Xenia, license: CC BY-NC, engine: silero, model: v5_5_ru, speaker: xenia }
+    - { id: silero-baya, label: Silero · Baya, license: CC BY-NC, engine: silero, model: v5_5_ru, speaker: baya }
+    - { id: silero-kseniya, label: Silero · Kseniya, license: CC BY-NC, engine: silero, model: v5_5_ru, speaker: kseniya }
+    - { id: silero-aidar, label: Silero · Aidar, license: CC BY-NC, engine: silero, model: v5_5_ru, speaker: aidar }
+    - { id: silero-eugene, label: Silero · Eugene, license: CC BY-NC, engine: silero, model: v5_5_ru, speaker: eugene }
+    - { id: mit-ekaterina, label: Silero CIS · Ekaterina, license: MIT, engine: silero, model: v5_cis_base, speaker: ru_ekaterina }
+    - { id: mit-zinaida, label: Silero CIS · Zinaida, license: MIT, engine: silero, model: v5_cis_base, speaker: ru_zinaida }
+    - { id: mit-dmitriy, label: Silero CIS · Dmitriy, license: MIT, engine: silero, model: v5_cis_base, speaker: ru_dmitriy }
+    - { id: mit-igor, label: Silero CIS · Igor, license: MIT, engine: silero, model: v5_cis_base, speaker: ru_igor }
+    - { id: macos-milena, label: macOS · Milena, license: macOS, engine: say, model: Milena }
+
+encoding:
+  wav_sample_rate: 24000
+  aac_bitrate: 64000

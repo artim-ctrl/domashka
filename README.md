@@ -1,53 +1,74 @@
 # domashka
 
-Домашка по русскому для испаноговорящих. Пока это одна страница: таблица русских звуков,
-у каждого звука и слова — кнопка с записью. Go отдаёт текст страницы и записи, React их рисует.
+Russian homework for Spanish speakers. For now it is one page: a table of Russian sounds where every
+sound and word has a button with a recording. Go serves the page text and the recordings, React renders
+them.
 
-## Запуск
+## Running
 
 ```sh
-make install   # зависимости интерфейса
-make api       # сервер на :8080
-make web       # интерфейс на :5180, /api проксируется на сервер
+make install   # frontend dependencies
+make api       # server on :8080
+make web       # frontend on :5180, /api is proxied to the server
 ```
 
-`make serve` собирает всё и поднимает одним сервером на :8080. `make help` — остальные цели.
+`make serve` builds everything and runs it as one server on :8080. `make help` lists the other targets.
 
-## Прод
+## Configuration
 
-Приложение живёт на `example.com/domashka/`. Образ (`Dockerfile`, ~10 МБ) — сервер, собранный
-интерфейс и записи из `audio/`; админки и синтезатора в нём нет, озвучку выбирают локально и
-коммитят. При сборке прогоняются тесты сервера: с битым `page.json` или `speech.json` образ не
-соберётся.
+All backend settings live in YAML files in [`config/`](config): addresses, timeouts, directories and
+file names, accepted audio formats, request limits, voices and synthesizer and encoder parameters.
+`config/base.yaml` holds every default; `config/serve.yaml` and `config/production.yaml` are layered on
+top of it and override only what differs:
 
-### Деплой на сервер с nginx
+```sh
+domashka -config config/base.yaml -config config/production.yaml
+```
 
-На сервере нужны только Docker Engine с плагином compose и вход по ssh от пользователя из
-группы `docker`. Исходники, git, make, Node и Go там не нужны: образ собирается у тебя.
+The app validates the result at startup and refuses to run with unknown keys or invalid values.
 
-1. Один раз — nginx: вставить [`deploy/nginx.conf`](deploy/nginx.conf) внутрь `server { … }`
-   сайта (туда, где TLS), затем `sudo nginx -t && sudo systemctl reload nginx`.
-2. Каждый раз — с этой машины, из закоммиченного состояния:
+## Code layout
+
+The Go module lives at the repository root: `cmd/domashka` only starts the app, everything else is in
+`internal/`, split into `domain`, `application`, `infrastructure` and `transport/httpserver` (Fiber v3)
+and wired with Uber fx in `bootstrap`. The frontend is in `web/` (React, Mantine). See
+[AGENTS.md](AGENTS.md) for the full map and conventions.
+
+## Production
+
+The app lives at `example.com/domashka/`. The image (`Dockerfile`, ~10 MB) contains the server, the
+built frontend and the recordings from `audio/`; there is no admin mode or synthesizer in it, voiceovers
+are chosen locally and committed. Server tests run during the build, so a broken `page.json` or
+`speech.json` fails the build.
+
+### Deploying to a server with nginx
+
+The server only needs Docker Engine with the compose plugin and ssh access for a user in the `docker`
+group. Sources, git, make, Node and Go are not needed there: the image is built on your machine.
+
+1. Once, nginx: paste [`deploy/nginx.conf`](deploy/nginx.conf) inside the site's `server { … }` block
+   (where TLS is configured), then `sudo nginx -t && sudo systemctl reload nginx`.
+2. Every time, from this machine, from a committed state:
 
    ```sh
    make deploy SERVER=user@example.com
    ```
 
-   Скрипт ([`deploy/deploy.sh`](deploy/deploy.sh)) соберёт образ под архитектуру сервера,
-   передаст его по ssh, положит `compose.yaml` в `~/domashka/` и поднимет контейнер, дождавшись
-   `healthy`. Если порт 8080 на сервере занят — `PORT=8081 make deploy …` и тот же порт в
-   `nginx.conf`.
+   The script ([`deploy/deploy.sh`](deploy/deploy.sh)) builds the image for the server's architecture,
+   sends it over ssh, puts `compose.yaml` into `~/domashka/` and starts the container, waiting for
+   `healthy`. If port 8080 is taken on the server, use `PORT=8081 make deploy …` and the same port in
+   `nginx.conf`. `ALLOW_DIRTY=1` deploys with uncommitted changes.
 
-Откат: у образов на сервере теги по коммитам —
-`docker tag domashka:<коммит> domashka:latest && cd ~/domashka && docker compose up -d --no-build`.
-После перезагрузки сервера контейнер поднимется сам (`restart: unless-stopped`).
+Rollback: images on the server are tagged by commit:
+`docker tag domashka:<commit> domashka:latest && cd ~/domashka && docker compose up -d --no-build`.
+After a server reboot the container starts by itself (`restart: unless-stopped`).
 
-Локально прод-образ можно поднять так же: `make docker-up` (127.0.0.1:8080/domashka/),
+Locally the production image runs the same way: `make docker-up` (127.0.0.1:8080/domashka/),
 `make docker-down`.
 
-Префикс задаёт `BASE_PATH` (в `compose.yaml` — `/domashka`; пусто — корень сайта). Интерфейс
-и API ходят по относительным адресам, так что одна сборка годится под любой префикс; прокси
-пересылает путь как есть. Вместо nginx подойдёт и Caddy:
+The prefix is `server.base_path` in `config/production.yaml` (`/domashka`; empty means the site root). The UI and
+the API use relative URLs, so one build fits any prefix; the proxy forwards the path as is. Caddy works
+instead of nginx too:
 
 ```caddy
 example.com {
@@ -55,77 +76,78 @@ example.com {
 }
 ```
 
-Безопасность (проверено ревью и тестами в `server/security_test.go`):
+Security (covered by tests in `internal/transport/httpserver/security_test.go`):
 
-- контейнер: не root, файловая система только на чтение, без capabilities, лимиты памяти и
-  процессов, ротация логов; порт — только на 127.0.0.1, наружу — через прокси с TLS;
-- сервер: таймауты на чтение, запись и простой соединения; CSP только «своё» (скрипт темы в
-  `index.html` — по хэшу, считается при старте), `nosniff`, запрет встраивания во фрейм;
-  без списков файлов в папках; записи читаются один раз при старте;
-- путь к файлу никогда не строится из адреса — только из ключей страницы;
-- базовые образы закреплены по digest, обновления — от Dependabot.
+- container: non-root, read-only filesystem, no capabilities, memory and process limits, log rotation;
+  the port is bound to 127.0.0.1 only (a port published on 0.0.0.0 would bypass the proxy and the host
+  firewall), the outside world goes through a TLS proxy;
+- server: read, write and idle timeouts; CSP allows scripts only from the app's own origin (the theme script in
+  `index.html` by hash, computed at startup; inline styles are allowed for Mantine), `nosniff`, no framing; no directory listings; recordings
+  are read once at startup;
+- a file path is never built from the URL, only from page keys;
+- base images are pinned by digest, updates come from Dependabot.
 
-Приложение под префиксом делит origin с остальным `example.com`: у него общий `localStorage`
-и т. п. Секретов и входа в проде нет, так что это не страшно, но если на домене живут чужие
-приложения — лучше поддомен.
+An app under a prefix shares the origin with the rest of `example.com`, including `localStorage`.
+There are no secrets or logins in production, so this is acceptable, but if other people's apps live
+on the domain, a subdomain is better.
 
-## Записи и админка
+## Recordings and the admin mode
 
-Записи лежат в `audio/` как `.m4a` и коммитятся вместе с `audio/choices.json` — каким голосом
-и текстом сделана каждая. Серверу для раздачи синтезатор не нужен.
+Recordings live in `audio/` as `.m4a` and are committed together with `audio/choices.json`, which records
+the voice and text of each one. Serving them does not need the synthesizer.
 
-Озвучку выбирают в самом интерфейсе. `make api` запускает сервер с флагом `-admin`; в браузере
-нужно один раз выполнить `localStorage.setItem("is_admin", "true")` и обновить страницу.
-Дальше клик по любому звуку или слову открывает справа панель:
+Voiceovers are chosen in the UI itself. `make api` starts the server with `-admin`; in the browser run
+`localStorage.setItem("is_admin", "true")` once and reload the page. After that, clicking any sound or
+word opens a drawer on the right:
 
-- текст для синтезатора — `+` перед ударной гласной (`молок+о`); его можно поправить и
-  сгенерировать заново;
-- варианты 10 голосов: Silero (5 голосов, лицензия CC BY-NC — только некоммерческое
-  использование), Silero CIS (4 голоса, MIT, но дикторы из других языков СНГ — возможен акцент)
-  и macOS Milena. Если вариантов ещё нет, они делаются сами;
-- «Выбрать» — вариант становится записью на странице; ← → — соседние записи, 1…0 — послушать
-  вариант, «Следующий без выбора» — к ещё не разобранной.
+- the text for the synthesizer, with `+` before the stressed vowel (`молок+о`); it can be edited and
+  generated again;
+- candidates from 10 voices: Silero (5 voices, CC BY-NC license: non-commercial use only), Silero CIS
+  (4 voices, MIT, but the speakers come from other CIS languages, so an accent is possible) and macOS
+  Milena. If there are no candidates yet, they are generated automatically;
+- "Choose" makes the candidate the recording on the page; ← → move between clips, 1…0 play a candidate,
+  "Next without a choice" jumps to a clip that has not been chosen yet.
 
-Без `-admin` (`make serve`, как для учеников) генерировать и сохранять нельзя, даже если
-`is_admin` стоит. С `-admin` сервер пускает только запросы с localhost и только со своей же
-страницы — чужой сайт, открытый в том же браузере, админку не тронет (ни подделкой запроса,
-ни DNS rebinding). Варианты складываются в `candidates/` (не в git). `make voices` заранее делает
-варианты для всех записей, где их нет, — чтобы в админке не ждать.
+Without `-admin` (`make serve`, as for students) nothing can be generated or saved, even with `is_admin`
+set. With `-admin` the server accepts requests only from localhost and only from its own page, so another
+site open in the same browser cannot touch the admin mode (neither by a forged request nor by DNS
+rebinding). Candidates go to `candidates/` (not in git). `make voices` pregenerates candidates for every
+clip that has none, so you do not wait in the admin mode.
 
-Silero работает в отдельном процессе Python (`tools/tts.py`), его запускает сервер через `uv`:
-зависимости (закреплённых версий) ставятся сами, модели (≈240 МБ) скачиваются при первом
-запуске в `~/.cache/domashka/silero` и грузятся, только если их SHA-256 совпал с записанным в
-`tools/tts.py` (модель — это pickle, то есть исполняемый код). Голос macOS и сохранение в `.m4a` требуют macOS (`say`, `afconvert`).
+Silero runs in a separate Python process (`tools/tts.py`) that the server starts through `uv`: pinned
+dependencies install themselves, models (≈240 MB) are downloaded on first use into
+`~/.cache/domashka/silero` and loaded only if their SHA-256 matches the one in `tools/tts.py` (a model is
+a pickle, i.e. executable code). The macOS voice and saving to `.m4a` need macOS (`say`, `afconvert`).
 
-Тексты по умолчанию — в `server/content/speech.json`. Одиночную согласную синтезатор читает
-названием буквы («ш» → «ша»), поэтому звуки там записаны иначе: протяжные ж з с ф х ш щ —
-утроенной буквой («шшш»), остальные согласные — слогом («б+а»), мягкие — «н+я». Сервер не
-запустится, если для записи со страницы нет текста или в слове опечатка.
+Default texts are in `content/speech.json`. Synthesizers read a lone consonant as the
+letter name ("ш" → "ша"), so sounds are written differently there: the continuous ж з с ф х ш щ are
+tripled ("шшш"), other consonants are syllables ("б+а"), soft ones are "н+я". The server does not start
+if a clip on the page has no text or a word has a typo.
 
-Можно класть файлы и руками: подходят `.m4a .mp3 .ogg .opus .webm .wav .aac`, регистр и
-ударение в имени не важны; `make missing` покажет, чего не хватает. Без `-admin` папка
-читается один раз при старте — после ручной правки перезапусти сервер.
+Files can be added by hand too: `.m4a .mp3 .ogg .opus .webm .wav .aac` are accepted, case and stress
+marks in the file name do not matter; `make missing` shows what is missing. Without `-admin` the
+directory is read once at startup, so restart the server after editing it by hand.
 
-## Текст страницы
+## Page text
 
-Весь текст — в `server/content/page.json` (вшивается в бинарь, после правки перезапусти
-`make api`). Разделы состоят из блоков `paragraph`, `callout`, `list`, `table` и `alphabet`.
-В строках работает разметка:
+All text is in `content/page.json` (read at startup; restart `make api` after editing). Sections consist of `paragraph`, `callout`, `list`, `table` and `alphabet` blocks. Strings
+support markup:
 
-- `**жирный**`, `*курсив*`;
-- `{{s:ш}}` — кнопка звука, `{{w:дом}}` — кнопка слова;
-- `{{w:молоко|молоко́}}` — ключ записи, после `|` — что показать.
+- `**bold**`, `*italic*`;
+- `{{s:ш}}` is a sound button, `{{w:дом}}` a word button;
+- `{{w:молоко|молоко́}}` is a clip key, and after `|` the label to show.
 
-## Языки
+## Languages
 
-Интерфейс на испанском, английском и русском. Язык берётся из сохранённого выбора, иначе из
-языка браузера, иначе испанский. Любая строка в `page.json` — либо просто строка (одинаковая
-на всех языках: `"{{w:база}} — {{w:ваза}}"`), либо объект `{"es": …, "en": …, "ru": …}`.
-Сервер при старте проверяет, что у каждой такой строки есть все три перевода и что кнопки
-`{{…}}` в переводах те же, — иначе не запустится и напишет, где ошибка. Надписи самого
-интерфейса (заголовки колонок, подсказки) — в `web/src/i18n.tsx`.
+The UI is in Spanish, English and Russian. The language comes from the saved choice, otherwise from the
+browser language, otherwise Spanish. Every string in `page.json` is either a plain string (the same in
+all languages: `"{{w:база}} — {{w:ваза}}"`) or an object `{"es": …, "en": …, "ru": …}`. At startup the
+server checks that each such string has all three translations with the same `{{…}}` buttons; otherwise
+it refuses to start and says where the error is. UI labels (column headers, hints, the admin mode) are in
+`web/src/i18n/locales/`.
 
-## Тема
+## Theme
 
-Светлая, тёмная или как в системе — переключатель в правом верхнем углу, выбор хранится
-в `localStorage`. Все цвета заданы парами `light-dark()` в `web/src/styles.css`.
+Light, dark or system: the switch is in the top right corner, the choice is kept in `localStorage`.
+The UI uses [Mantine](https://mantine.dev); the theme (colors, fonts, background) is in
+`web/src/theme/theme.ts`, component styles are CSS modules next to the components.

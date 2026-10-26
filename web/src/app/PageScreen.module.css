@@ -1,0 +1,15 @@
+.header {
+    background: color-mix(in srgb, var(--mantine-color-body) 85%, transparent);
+    backdrop-filter: blur(12px);
+}
+
+.title {
+    margin-block: var(--mantine-spacing-xl) var(--mantine-spacing-lg);
+    font-size: clamp(rem(30px), 4vw, rem(42px));
+    letter-spacing: -0.01em;
+}
+
+.section {
+    margin-bottom: rem(48px);
+    scroll-margin-top: calc(var(--app-shell-header-height) + var(--mantine-spacing-md));
+}

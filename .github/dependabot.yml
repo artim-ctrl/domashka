@@ -1,5 +1,3 @@
-# Обновления зависимостей пулл-реквестами: базовые образы закреплены по digest
-# и сами не обновятся.
 version: 2
 updates:
   - package-ecosystem: docker
@@ -11,5 +9,5 @@ updates:
     groups:
       web: { patterns: ["*"] }
   - package-ecosystem: gomod
-    directory: /server
+    directory: /
     schedule: { interval: weekly }

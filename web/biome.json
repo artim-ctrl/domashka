@@ -1,0 +1,64 @@
+{
+    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+    "vcs": {
+        "enabled": true,
+        "clientKind": "git",
+        "useIgnoreFile": true,
+        "root": ".."
+    },
+    "files": {
+        "includes": ["src/**", "*.ts", "*.json", "!package-lock.json"]
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4,
+        "lineWidth": 120
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "double",
+            "trailingCommas": "all",
+            "semicolons": "always"
+        }
+    },
+    "css": {
+        "parser": {
+            "cssModules": true
+        },
+        "formatter": {
+            "enabled": true
+        }
+    },
+    "assist": {
+        "actions": {
+            "source": {
+                "organizeImports": "on"
+            }
+        }
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "preset": "recommended",
+            "correctness": {
+                "useExhaustiveDependencies": "error",
+                "useHookAtTopLevel": "error",
+                "noUnusedImports": "error",
+                "noUnusedVariables": "error"
+            },
+            "style": {
+                "useConst": "error",
+                "useImportType": "error",
+                "noNonNullAssertion": "error"
+            },
+            "complexity": {
+                "useArrowFunction": "error"
+            },
+            "suspicious": {
+                "noConsole": "error",
+                "noArrayIndexKey": "off"
+            }
+        }
+    }
+}

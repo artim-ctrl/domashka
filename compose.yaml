@@ -1,28 +1,18 @@
-# Прод: docker compose up -d --build. Приложение живёт на example.com/domashka/.
-# Наружу — только через обратный прокси с TLS, который пересылает /domashka/ как есть
-# (пример в README). Порт слушается на 127.0.0.1: опубликованный на 0.0.0.0 порт Docker
-# открыл бы мимо прокси и мимо файрвола хоста (ufw его не фильтрует).
 services:
   domashka:
     build: .
     image: domashka:latest
     restart: unless-stopped
-    environment:
-      BASE_PATH: ${BASE_PATH:-/domashka}
     ports:
       - "127.0.0.1:${PORT:-8080}:8080"
-    # Сервер ничего не пишет на диск: записи и интерфейс вшиты в образ.
     read_only: true
     cap_drop: [ALL]
     security_opt:
       - no-new-privileges:true
-    # Потолок на случай наплыва запросов: упрётся контейнер, а не весь сервер.
     mem_limit: 256m
     pids_limit: 128
     cpus: 1
-    # SIGTERM → сервер дожидается текущих запросов (до 10 с) и выходит.
     stop_grace_period: 15s
-    # Без ротации логи Docker растут, пока не кончится диск.
     logging:
       driver: json-file
       options: { max-size: 10m, max-file: "3" }
