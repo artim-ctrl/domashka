@@ -36,22 +36,26 @@ and wired with Uber fx in `bootstrap`. The frontend is in `web/` (React, Mantine
 
 ## Production
 
-The app lives at `example.com/domashka/`. The image (`Dockerfile`, ~10 MB) contains the server, the
-built frontend and the recordings from `audio/`; there is no admin mode or synthesizer in it, voiceovers
-are chosen locally and committed. Server tests run during the build, so a broken `page.json` or
-`speech.json` fails the build.
+The app lives on its own subdomain, `https://domashka.artim.me/`. The image (`Dockerfile`, ~10 MB)
+contains the server, the built frontend and the recordings from `audio/`; there is no admin mode or
+synthesizer in it, voiceovers are chosen locally and committed. Server tests run during the build, so a
+broken `page.json` or `speech.json` fails the build.
 
 ### Deploying to a server with nginx
 
 The server only needs Docker Engine with the compose plugin and ssh access for a user in the `docker`
 group. Sources, git, make, Node and Go are not needed there: the image is built on your machine.
 
-1. Once, nginx: paste [`deploy/nginx.conf`](deploy/nginx.conf) inside the site's `server { … }` block
-   (where TLS is configured), then `sudo nginx -t && sudo systemctl reload nginx`.
-2. Every time, from this machine, from a committed state:
+1. Once, DNS: in Cloudflare, a proxied `A` record `domashka` pointing to the server, like the one for
+   `artim.me`. TLS needs nothing new: the Cloudflare origin certificate in `/etc/ssl/cloudflare/`
+   already covers `*.artim.me`.
+2. Once, nginx: copy [`deploy/nginx.conf`](deploy/nginx.conf) to
+   `/etc/nginx/sites-available/domashka`, link it into `sites-enabled`, then
+   `sudo nginx -t && sudo systemctl reload nginx`.
+3. Every time, from this machine, from a committed state:
 
    ```sh
-   make deploy SERVER=user@example.com
+   make deploy SERVER=user@host
    ```
 
    The script ([`deploy/deploy.sh`](deploy/deploy.sh)) builds the image for the server's architecture,
@@ -63,16 +67,15 @@ Rollback: images on the server are tagged by commit:
 `docker tag domashka:<commit> domashka:latest && cd ~/domashka && docker compose up -d --no-build`.
 After a server reboot the container starts by itself (`restart: unless-stopped`).
 
-Locally the production image runs the same way: `make docker-up` (127.0.0.1:8080/domashka/),
-`make docker-down`.
+Locally the production image runs the same way: `make docker-up` (127.0.0.1:8080/), `make docker-down`.
 
-The prefix is `server.base_path` in `config/production.yaml` (`/domashka`; empty means the site root). The UI and
-the API use relative URLs, so one build fits any prefix; the proxy forwards the path as is. Caddy works
-instead of nginx too:
+The app is served from the site root. It can still live under a path prefix (`server.base_path` in the
+config, empty by default): the UI and the API use relative URLs, so one build fits any prefix and the
+proxy forwards the path as is. Caddy works instead of nginx too:
 
 ```caddy
-example.com {
-	handle /domashka* { reverse_proxy 127.0.0.1:8080 }
+domashka.artim.me {
+	reverse_proxy 127.0.0.1:8080
 }
 ```
 
@@ -81,15 +84,14 @@ Security (covered by tests in `internal/transport/httpserver/security_test.go`):
 - container: non-root, read-only filesystem, no capabilities, memory and process limits, log rotation;
   the port is bound to 127.0.0.1 only (a port published on 0.0.0.0 would bypass the proxy and the host
   firewall), the outside world goes through a TLS proxy;
-- server: read, write and idle timeouts; CSP allows scripts only from the app's own origin (the theme script in
-  `index.html` by hash, computed at startup; inline styles are allowed for Mantine), `nosniff`, no framing; no directory listings; recordings
-  are read once at startup;
+- server: read, write and idle timeouts; CSP allows scripts only from the app's own origin (the theme
+  script in `index.html` by hash, computed at startup; inline styles are allowed for Mantine),
+  `nosniff`, no framing; no directory listings; recordings are read once at startup;
 - a file path is never built from the URL, only from page keys;
 - base images are pinned by digest, updates come from Dependabot.
 
-An app under a prefix shares the origin with the rest of `example.com`, including `localStorage`.
-There are no secrets or logins in production, so this is acceptable, but if other people's apps live
-on the domain, a subdomain is better.
+The subdomain gives the app its own origin, so its `localStorage` and cookies are not shared with other
+apps on `artim.me`.
 
 ## Recordings and the admin mode
 

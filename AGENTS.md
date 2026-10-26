@@ -41,7 +41,7 @@ cmd/domashka/          main.go: signal handling and app.Run, nothing else
 config/
   base.yaml            every setting with its default (local development)
   serve.yaml           layered on base for `make serve`: also serves web/dist
-  production.yaml      layered on base in the Docker image: container paths, /domashka prefix
+  production.yaml      layered on base in the Docker image: container paths
 content/
   page.json            all page text, read at startup
   speech.json          what the synthesizer says for each clip, "+" marks stress
@@ -139,17 +139,20 @@ The `Dockerfile` builds an image from the server, `web/dist` and `audio/` (distr
 ~10 MB, base images pinned by digest and updated by Dependabot). The admin mode, the synthesizer and
 `candidates/` are not in the image and must not be. Server tests run during the build, so broken
 content fails the build. The server shuts down gracefully on SIGTERM; `/healthz` and `-healthcheck`
-are for Docker. Production is `example.com/domashka/` behind the host's nginx; `deploy/nginx.conf` goes
-inside the site's `server { … }` block (the path is forwarded as is; JS/CSS/JSON compression is done
-there, Go does not compress).
+are for Docker. Production is `https://domashka.artim.me/` (its own subdomain, served from the root)
+behind Cloudflare and the host's nginx; `deploy/nginx.conf` is the whole site with the HTTP→HTTPS
+redirect and the Cloudflare origin certificate (`/etc/ssl/cloudflare/`, covers `*.artim.me`). The
+server runs nginx 1.24: use `listen 443 ssl http2`, not `http2 on`. JS/CSS/JSON compression is done in
+nginx, Go does not compress.
 
 ## Security
 
 Production is open to the internet; the admin mode is local only. Rules that are easy to break:
 
-- The UI lives under a prefix (`server.base_path: /domashka` in `config/production.yaml`). All URLs in
-  the frontend and in server responses are **relative** (`api/page`, `api/audio/…`); Vite builds with
-  `base: "./"`. An absolute `/api/...` breaks production.
+- Production serves the UI from the root, but the app still supports a path prefix
+  (`server.base_path`). Keep all URLs in the frontend and in server responses **relative**
+  (`api/page`, `api/audio/…`; Vite builds with `base: "./"`): an absolute `/api/...` breaks prefixed
+  deployments, and `TestBasePath` guards this.
 - File paths are built only from page keys (`FindClip`, directory scan), never from the URL.
 - New admin endpoints go only into the `opts.Admin` block in `internal/transport/httpserver/routes.go`
   (and `AdminEndpoints`); `adminGuard` protects them (localhost Host, same-origin, `Content-Type: application/json`, which a foreign page cannot send

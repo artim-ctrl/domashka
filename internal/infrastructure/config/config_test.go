@@ -28,7 +28,7 @@ func TestLayering(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if cfg.Server.BasePath != "/domashka" || cfg.Library.Dir != "/app/audio" {
+	if cfg.Server.BasePath != "" || cfg.Server.StaticDir != "/app/web" || cfg.Library.Dir != "/app/audio" {
 		t.Errorf("production overrides not applied: %+v", cfg.Server)
 	}
 	if cfg.Server.Timeouts.Shutdown != 10*time.Second || cfg.Library.ChoicesFile != "choices.json" {

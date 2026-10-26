@@ -28,4 +28,4 @@ ssh "$server" "mkdir -p '$dir'"
 scp -q compose.yaml "$server:$dir/compose.yaml"
 ssh "$server" "docker tag 'domashka:$tag' domashka:latest && cd '$dir' && PORT='$port' docker compose up -d --no-build --wait"
 
-echo "✓ domashka:$tag is running on $server (127.0.0.1:$port, path /domashka/)"
+echo "✓ domashka:$tag is running on $server (127.0.0.1:$port)"
