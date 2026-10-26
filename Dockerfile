@@ -10,7 +10,7 @@
 # Обновляет их Dependabot (.github/dependabot.yml).
 #
 # Сборочные стадии идут на родной платформе машины: результат у них переносимый.
-FROM --platform=$BUILDPLATFORM node:26-alpine@sha256:0b36e8c136b94cd4fcf02188228e76c31ad5872eef3fec8cbd2eee500cfd9e80 AS web
+FROM --platform=$BUILDPLATFORM node:26-alpine@sha256:40cd011b55415bc894e45b02fdd5a5dfde056921b7d23a64c74f80497af48797 AS web
 WORKDIR /src/web
 COPY web/package.json web/package-lock.json ./
 # Скрипты установки пакетов не нужны (единственный — у fsevents для macOS), а запускать их — риск.
